@@ -1,0 +1,43 @@
+.sidebar {
+  transition: all 0.3s ease;
+  height: 100vh;
+  position: sticky !important;
+  top: 0;
+  background-color: #3948eb;
+}
+
+@media (min-width: 400px) {
+  .sidebar:hover .sidebar-items {
+    font-size: large;
+  }
+  .sidebar:hover .sidebar-icons {
+    margin: 0px 16px 0px 0px !important;
+  }
+  .sidebar-link:hover {
+    transform: scale(1.1);
+  }
+}
+
+.sidebar-items {
+  transition: all 0.3s ease;
+  font-size: 0;
+}
+.username {
+  margin: 0;
+}
+
+.sidebar-icons {
+  margin-right: 5px;
+}
+.sidebar-link {
+  color: #ffffff;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.sidebar-link.active {
+  background-color: rgb(255, 255, 255);
+}
+.sidebar-link.active {
+  color: #3948eb;
+}

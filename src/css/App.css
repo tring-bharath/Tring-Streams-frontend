@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+*
+{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+.ellipsis
+{
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.side-bar
+{
+  height: 100vh;
+  padding:0px 60px 0px 10px;
+  position: sticky;
+  top: 0;
+}
+.link
+{
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  column-gap: white !important;
+}
+.thumbnail
+{
+  height: 130px;
+  width: 250px;
+}
+
+h4
+{
+  text-transform: capitalize;
+}
+.video-cards
+{
+  width: 100%;  
+  flex-wrap: wrap;
+  justify-content: left;
+  margin: 0px;
+}
+.sideImage
+{
+  height: 100vh;
+}

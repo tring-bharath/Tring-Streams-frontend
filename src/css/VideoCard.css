@@ -1,0 +1,39 @@
+.video-card:hover
+{
+  height: auto;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+  font-family: "Rubik", sans-serif;
+  background-color: #b7c2fc;
+}
+.tag
+{
+  margin-bottom: 0px;
+}
+
+.thumbnail
+{
+  cursor: pointer;
+}
+.video-card
+{
+  height: 200px;
+  width: 250px;
+  margin-bottom: 20px;
+  font-family: "Rubik",sans-serif;
+  letter-spacing: 0.5px;
+  gap:10px;
+  background-color: #dfe4fd;
+  /* background-color: #f5f5f5; */
+}
+
+
+.video-card:hover .add-watchlist
+{
+  display: block;
+}
+
+.add-watchlist
+{
+  display: none;
+}
