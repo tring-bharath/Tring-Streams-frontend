@@ -1,25 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ProfileName } from "../../routes/AppRoutes";
 import { Button, Modal, Form } from "react-bootstrap";
-import image from '../../assets/front_image.jpg';
 import axios from "axios";
 
 const Loggedin = () => {
-  const url=import.meta.env.VITE_API_URL;
+  const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
-  const email=JSON.parse(localStorage.getItem("email"));
-  const [formData, setFormData] = useState({email});
+  const email = JSON.parse(localStorage.getItem("email"));
+  const [formData, setFormData] = useState({ email });
   const { userName, setUsername } = useContext(ProfileName);
-  
-  const apiCall = async () => {
-    console.log({ email });
 
-    const response = await axios.post(`${url}/user/getUser`, { email }).then((res) => setFormData(res.data));
+  const apiCall = async () => {
+    await axios
+      .post(`${url}/user/getUser`, { email })
+      .then((res) => setFormData(res.data));
   };
-  useEffect(() => { apiCall(); }, []);
-  useEffect(() => { console.log(formData);
-  ; }, [formData]);
+  useEffect(() => {
+    apiCall();
+  }, []);
   const logout = () => {
     localStorage.clear("User");
     setUsername(null);
@@ -31,12 +30,10 @@ const Loggedin = () => {
   };
 
   const handleEditSubmit = () => {
-    console.log("Updated Profile Data:", formData);
-    try{
-    const res=axios.post(`${url}/user/updateUser`,  formData )
-    }
-    catch(error){
-        console.log(error);
+    try {
+      axios.post(`${url}/user/updateUser`, formData);
+    } catch (error) {
+      console.log(error);
     }
     setEditShow(false);
   };
@@ -47,7 +44,7 @@ const Loggedin = () => {
       const imageUrl = URL.createObjectURL(file);
       setFormData({ ...formData, ProfilePicture: imageUrl });
     }
-  }
+  };
 
   return (
     <div className="w-100">
@@ -76,7 +73,13 @@ const Loggedin = () => {
           <Modal.Body>
             <Form>
               <Form.Group className="mb-3">
-                <Form.Label><img src={formData?.ProfilePicture} className="rounded-circle" style={{width:"150px"}}/></Form.Label>
+                <Form.Label>
+                  <img
+                    src={formData?.ProfilePicture}
+                    className="rounded-circle"
+                    style={{ width: "150px" }}
+                  />
+                </Form.Label>
                 <Form.Control
                   type="file"
                   name="profile"
@@ -112,21 +115,21 @@ const Loggedin = () => {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Gender</Form.Label>
-                <Form.Check 
-                type="radio"
-                name="gender"
-                value="Male"
-                label="Male"
-                checked={formData.gender=="Male"}
-                onChange={handleEditChange}
+                <Form.Check
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  label="Male"
+                  checked={formData.gender == "Male"}
+                  onChange={handleEditChange}
                 />
-                <Form.Check 
-                type="radio"
-                name="gender"
-                value="Female"
-                label="Female"
-                checked={formData.gender=="Female"}
-                onChange={handleEditChange}
+                <Form.Check
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  label="Female"
+                  checked={formData.gender == "Female"}
+                  onChange={handleEditChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -172,11 +175,17 @@ const Loggedin = () => {
           <div className="header d-flex justify-content-between w-100">
             <div className="history h2 align-self-center ms-3">Profile</div>
             <div className="nav align-self-end m-3 ">
-              <button className="px-3 py-2 rounded-1 h5 text-white bg-primary" onClick={() => setShow(true)}>Logout</button>
+              <button
+                className="px-3 py-2 rounded-1 h5 text-white bg-primary"
+                onClick={() => setShow(true)}>
+                Logout
+              </button>
             </div>
           </div>
           <div className="profile-body ps-4 d-flex flex-column w-100">
-            <div className="card shadow-lg p-4 text-start" style={{ width: "350px" }}>
+            <div
+              className="card shadow-lg p-4 text-start"
+              style={{ width: "350px" }}>
               <img
                 src={formData?.ProfilePicture}
                 alt={""}
@@ -184,9 +193,19 @@ const Loggedin = () => {
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}
               />
               <h3>{userName}</h3>
-              <h6 className="text-muted">{formData.email&&<div>Mail:{formData?.email}</div>}</h6>
-              <h6 className="text-muted">{formData.phoneNumber&&<div>Contact:{formData?.phoneNumber}</div>}</h6>
-              <button className="btn btn-primary w-100" onClick={() => setEditShow(true)}>Edit Profile</button>
+              <h6 className="text-muted">
+                {formData.email && <div>Mail:{formData?.email}</div>}
+              </h6>
+              <h6 className="text-muted">
+                {formData.phoneNumber && (
+                  <div>Contact:{formData?.phoneNumber}</div>
+                )}
+              </h6>
+              <button
+                className="btn btn-primary w-100"
+                onClick={() => setEditShow(true)}>
+                Edit Profile
+              </button>
             </div>
           </div>
         </div>

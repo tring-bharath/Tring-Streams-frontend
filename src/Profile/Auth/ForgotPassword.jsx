@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
@@ -19,7 +19,6 @@ const ForgotPassword = () => {
         email: inputEmail,
       });
       toast.success("OTP Sent");
-      console.log(response);
       setOtpSend(true);
     } catch (error) {
       console.log(error);
@@ -41,11 +40,6 @@ const ForgotPassword = () => {
     }
   };
 
-  useEffect(()=>
-{
-    console.log(location.state);
-    
-},[])
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <ToastContainer />

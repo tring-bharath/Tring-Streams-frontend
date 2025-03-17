@@ -9,17 +9,17 @@ import { useState } from "react";
 
 export default function Signup() {
   const url = import.meta.env.VITE_API_URL;
-    const [toggleEye,setToggleEye]=useState(false);
-    const [confirmToggleEye,setConfirmToggleEye]=useState(false);
-    const [passwordType,setPasswordType]=useState("password");
-    const [confirmPasswordType,setConfirmPasswordType]=useState("password");
+  const [toggleEye, setToggleEye] = useState(false);
+  const [confirmToggleEye, setConfirmToggleEye] = useState(false);
+  const [passwordType, setPasswordType] = useState("password");
+  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const schema = yup.object().shape({
     firstName: yup.string().required("First name is required"),
     lastName: yup.string(),
     email: yup.string().email().required(),
     password: yup.string().min(8).required(),
     terms: yup.bool().oneOf([true], "You must accept the terms and conditions"),
-    confirmPassword: yup.string().min(8).required()
+    confirmPassword: yup.string().min(8).required(),
   });
 
   const nav = useNavigate();
@@ -32,38 +32,31 @@ export default function Signup() {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    try{
-      const user=await axios.post(`${url}/user/registerUser`,data);
-      console.log(user);
-      nav('/Registration')
-    }
-    catch (error) 
-    {
-      console.log(error);
-      
-      toast.error("Email already Exists")
+    try {
+      const user = await axios.post(`${url}/user/registerUser`, data);
+      nav("/Registration");
+    } catch (error) {
+      toast.error("Email already Exists");
     }
   };
 
-  const setEye=()=>
-    {
-      setToggleEye(!toggleEye);
-      setPasswordType(passwordType=="password"?"text":"password");
-    }
-    const confirmSetEye=()=>
-      {
-        setConfirmToggleEye(!confirmToggleEye);
-        setConfirmPasswordType(confirmPasswordType=="password"?"text":"password");
-      }
+  const setEye = () => {
+    setToggleEye(!toggleEye);
+    setPasswordType(passwordType == "password" ? "text" : "password");
+  };
+  const confirmSetEye = () => {
+    setConfirmToggleEye(!confirmToggleEye);
+    setConfirmPasswordType(
+      confirmPasswordType == "password" ? "text" : "password"
+    );
+  };
 
   return (
     <>
       <Toaster />
       <form
         className="form-container d-flex flex-column container"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+        onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-center">Sign-Up</h3>
         <label className="mt-2">First Name*</label>
         <input
@@ -119,15 +112,16 @@ export default function Signup() {
           />
           <label htmlFor="terms" className="d-flex align-self-center">
             I agree to the &nbsp;
-            <a href="https://tringapps.com/" target="blank">terms and conditions</a>
+            <a href="https://tringapps.com/" target="blank">
+              terms and conditions
+            </a>
           </label>
         </div>
         <p className="text-danger">{errors.terms?.message}</p>
 
         <button
           type="submit"
-          className="px-4 py-2 bg-primary mt-2 text-white rounded-1 align-self-center"
-        >
+          className="px-4 py-2 bg-primary mt-2 text-white rounded-1 align-self-center">
           Register
         </button>
       </form>

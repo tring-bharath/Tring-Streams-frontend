@@ -1,5 +1,4 @@
 import axios from "axios";
-import { div } from "framer-motion/client";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +37,7 @@ const Watchlist = () => {
             </div>
           ) : (
             <div className="w-100 d-flex align-items-center justify-content-center">
-              <h4 className="mt-5">Nothing is in the  WatchList</h4>
+              <h4 className="mt-5">Nothing is in the WatchList</h4>
             </div>
           )}
         </div>
@@ -71,7 +70,6 @@ const WatchListCard = ({ video, showCards }) => {
   };
 
   const watchNow = (Video) => {
-    console.log(Video);
     nav("/videoplayer", { state: Video });
   };
   return (
@@ -90,9 +88,9 @@ const WatchListCard = ({ video, showCards }) => {
           {video.tags.split(",")[0]}
         </h5>
         <div className="video-stats d-flex align-items-center mb-2">
-          <span className="fw-semibold me-3 ">
+          {/* <span className="fw-semibold me-3 ">
             <FaHeart size={12} className="text-danger" /> {video.likes}{" "}
-          </span>
+          </span> */}
           <span className="fw-semibold me-3">
             <FaEye size={13} className="" /> {video.views}
           </span>

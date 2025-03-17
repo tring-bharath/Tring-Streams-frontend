@@ -3,17 +3,17 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { Link, useAsyncError, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileName } from "../../routes/AppRoutes";
 import { toast, ToastContainer } from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa";  
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
   const { userName, setUsername } = useContext(ProfileName);
-  const [email,setEmail]=useState();
+  const [email, setEmail] = useState();
 
   const nav = useNavigate();
 
@@ -30,13 +30,10 @@ const Login = () => {
 
   const onSubmit = async (user) => {
     try {
-      setEmail(user.email)
+      setEmail(user.email);
       console.log(user);
 
-      const userLogin = await axios.post(
-        `${url}/user/loginUser`,
-        user
-      );
+      const userLogin = await axios.post(`${url}/user/loginUser`, user);
 
       const username = userLogin.data.firstName;
       const userId = userLogin.data._id;
@@ -45,11 +42,10 @@ const Login = () => {
         toast.error("Invalid Credentials");
         return;
       }
-      localStorage.setItem("user",JSON.stringify(username));
-      localStorage.setItem("id",JSON.stringify(userId));
-      localStorage.setItem("email",JSON.stringify(email));
+      localStorage.setItem("user", JSON.stringify(username));
+      localStorage.setItem("id", JSON.stringify(userId));
+      localStorage.setItem("email", JSON.stringify(email));
       setUsername(username);
-      console.log(userName);
 
       nav("/");
     } catch (error) {
@@ -67,8 +63,7 @@ const Login = () => {
       <ToastContainer />
       <form
         className="form-container d-flex flex-column container justify-content-center"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+        onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-center">Login</h3>
         <div className="email">
           <label className="mt-3">Email*</label>
@@ -76,7 +71,8 @@ const Login = () => {
             className="form-control border-success"
             type="email"
             {...register("email")}
-            onChange={(e)=>{setEmail(e.target.value);
+            onChange={(e) => {
+              setEmail(e.target.value);
             }}
           />
         </div>
@@ -95,12 +91,13 @@ const Login = () => {
         </div>
         <p className="text-danger">{errors.password?.message}</p>
         <div className="forgotPassword align-self-end">
-          <Link to="/forgotpassword" state={email}>Forgot-Password?</Link>
+          <Link to="/forgotpassword" state={email}>
+            Forgot-Password?
+          </Link>
         </div>
         <button
           className="px-4 py-2 bg-primary mt-2 text-white rounded-1 align-self-center"
-          type="submit"
-        >
+          type="submit">
           Login
         </button>
       </form>

@@ -9,9 +9,7 @@ const HistoryCard = ({ video, showCards }) => {
   const [hover, setHover] = useState(false);
 
   const remove = async (video) => {
-    const deletedVideo = await axios.delete(
-      `${url}/video/removeFromHistory/${video._id}`
-    ); 
+    await axios.delete(`${url}/video/removeFromHistory/${video._id}`);
     showCards();
   };
 
@@ -34,9 +32,9 @@ const HistoryCard = ({ video, showCards }) => {
           {video.tags?.split(",")[0]}
         </h5>
         <div className="video-stats mb-2 d-flex align-items-center">
-          <span className="fw-semibold me-2">
+          {/* <span className="fw-semibold me-2">
             <FaHeart size={12} className="text-danger" /> {video.likes}{" "}
-          </span>
+          </span> */}
           <span className="fw-semibold me-3">
             <FaEye size={13} className="" /> {video.views}
           </span>
@@ -47,9 +45,6 @@ const HistoryCard = ({ video, showCards }) => {
           </button>
         </div>
       </div>
-      {hover && (
-        <div className="overlay-buttons d-flex"> </div>
-      )}
     </div>
   );
 };

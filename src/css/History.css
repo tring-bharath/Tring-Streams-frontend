@@ -1,12 +1,10 @@
-
-.history-cards
-{
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    gap: 10px;
+.history-cards {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  gap: 10px;
 }

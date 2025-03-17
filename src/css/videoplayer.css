@@ -1,22 +1,19 @@
-
-.video-panel
-{
-    height: 90vh;
-    width: 100%;
-}
-.video-cards
-{
+.video-panel {
+  height: 90vh;
   width: 100%;
-  justify-content:left;
-  gap:2%;
+}
+.video-cards {
+  width: 100%;
+  justify-content: left;
+  gap: 2%;
   scrollbar-width: none;
 }
 .search-box::placeholder {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 30px; 
-    color: gray;
-    padding-left: 5px;
-  }
-  .search-box{
-    width: 80%;
-  }
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 30px;
+  color: gray;
+  padding-left: 5px;
+}
+.search-box {
+  width: 80%;
+}
