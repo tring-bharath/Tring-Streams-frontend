@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../css/videoplayer.css";
+import "./videopreview.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import VideoCard from "./VideoCard";
+import VideoCard from "../VideoCard/VideoCard";
 import axios from "axios";
 import ReactPlayer from "react-player";
 

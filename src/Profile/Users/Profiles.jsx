@@ -1,13 +1,13 @@
 import React from "react";
-import Loggedout from "./Loggedout";
-import Loggedin from "./Loggedin";
+import LoggedOut from "./LoggedOut";
+import LoggedIn from "./LoggedIn";
 
 const Profile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="d-flex w-100">
-      {user == null ? <Loggedout /> : <Loggedin />}
+      {user == null ? <LoggedOut /> : <LoggedIn />}
     </div>
   );
 };

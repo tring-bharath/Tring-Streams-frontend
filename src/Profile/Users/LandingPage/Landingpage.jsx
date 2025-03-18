@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import "../css/Registration.css";
+import "./LandingPage.css";
+import { ToastContainer } from "react-toastify";
+
 const Landingpage = () => {
   const [active, setActive] = useState(0);
   const nav = useNavigate();
-
   const location = useLocation();
+
   const login = () => {
     nav("/registration");
     setActive(0);
@@ -15,6 +17,7 @@ const Landingpage = () => {
     nav("/registration/signup");
     setActive(1);
   };
+
   useEffect(() => {
     if (location.pathname === "/Registration") {
       setActive(0);
@@ -22,8 +25,10 @@ const Landingpage = () => {
       setActive(1);
     }
   }, [location.pathname]);
+
   return (
     <div className="registerContainer bg-white d-flex">
+      <ToastContainer />
       <div className="Container ">
         <div className="formContainer shadow-lg ">
           <div className="registerButton d-flex justify-content-center align-items-center">

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Loggedout = () => {
+const LoggedOut = () => {
   const navigate = useNavigate();
 
   const loginNavigate = () => {
@@ -22,4 +22,4 @@ const Loggedout = () => {
   );
 };
 
-export default Loggedout;
+export default LoggedOut;

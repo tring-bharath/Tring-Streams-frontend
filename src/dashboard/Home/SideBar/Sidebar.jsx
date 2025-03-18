@@ -1,10 +1,10 @@
-import { ProfileName } from "../routes/AppRoutes";
+import { ProfileName } from "../../../routes/AppRoutes";
 import React, { useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaBookmark, FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/Sidebar.css";
+import "./Sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -19,6 +19,7 @@ const Sidebar = () => {
   useEffect(() => {
     setUsername(user);
   }, [user]);
+
   return (
     <div className="sidebar p-3 d-flex flex-column justify-content-center gap-4">
       <Link

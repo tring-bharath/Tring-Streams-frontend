@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { FaBookmark, FaEye, FaHeart } from "react-icons/fa";
+import { FaBookmark, FaEye, FaRegBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "../css/VideoCard.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Image, Modal } from "react-bootstrap";
+import "./VideoCard.css";
 
 const VideoCard = ({ video }) => {
+  const nav = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
-  const nav = useNavigate();
-
+  const [isBookMarked, setIsBookMarked] = useState(false);
   const user = localStorage.getItem("user");
+
   const watchNow = async () => {
     if (user) {
       nav("/videoplayer", { state: video });
@@ -21,7 +22,9 @@ const VideoCard = ({ video }) => {
       setShow(true);
     }
   };
+
   const watchList = async (video) => {
+    setIsBookMarked(true);
     const userId = JSON.parse(localStorage.getItem("id"));
     const newVideo = { ...video, userId: userId };
     await axios
@@ -36,11 +39,12 @@ const VideoCard = ({ video }) => {
 
   return (
     <div className="video-card rounded-1 pb-2">
-      <img
+      <Image
         onClick={() => watchNow()}
         src={video.thumbnail}
         alt="video thumbnail"
-        className="thumbnail cards rounded-1"
+        className="thumbnail cards"
+        rounded
       />
       <div className="video-info d-flex flex-column">
         <h4 className="ellipsis px-2 video-title">{video.tags}</h4>
@@ -56,7 +60,7 @@ const VideoCard = ({ video }) => {
               <button
                 className="add-watchlist button rounded px-2 py-1"
                 onClick={() => watchList(video)}>
-                <FaBookmark />
+                {!isBookMarked ? <FaRegBookmark /> : <FaBookmark />}
               </button>
             ) : (
               ""

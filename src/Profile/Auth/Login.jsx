@@ -7,12 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { ProfileName } from "../../routes/AppRoutes";
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import '../../index.css'
 
 const Login = () => {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
-  const { userName, setUsername } = useContext(ProfileName);
+  const { setUsername } = useContext(ProfileName);
   const [email, setEmail] = useState();
 
   const nav = useNavigate();
@@ -91,12 +92,12 @@ const Login = () => {
         </div>
         <p className="text-danger">{errors.password?.message}</p>
         <div className="forgotPassword align-self-end">
-          <Link to="/forgotpassword" state={email}>
-            Forgot-Password?
+          <Link to="/forgotpassword" state={email} className="link">
+            Forgot Password?
           </Link>
         </div>
         <button
-          className="px-4 py-2 bg-primary mt-2 text-white rounded-1 align-self-center"
+          className="px-4 py-2 bg-primary mt-4 text-white rounded-1 align-self-center"
           type="submit">
           Login
         </button>

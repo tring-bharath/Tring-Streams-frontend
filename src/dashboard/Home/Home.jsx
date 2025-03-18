@@ -1,11 +1,13 @@
-import React, { createContext, useEffect, useState } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Sidebar";
+import Sidebar from "./SideBar/Sidebar";
+import { ToastContainer } from "react-toastify";
 
 const Home = () => {
   return (
     <div className="d-flex">
-      <Sidebar className="" />
+      <ToastContainer />
+      <Sidebar/>
       <Outlet className="outlet position-absolute" />
     </div>
   );

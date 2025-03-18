@@ -3,7 +3,7 @@ import { ProfileName } from "../../routes/AppRoutes";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 
-const Loggedin = () => {
+const LoggedIn = () => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
@@ -11,14 +11,12 @@ const Loggedin = () => {
   const [formData, setFormData] = useState({ email });
   const { userName, setUsername } = useContext(ProfileName);
 
-  const apiCall = async () => {
+  const handleGetAllUser = async () => {
     await axios
       .post(`${url}/user/getUser`, { email })
       .then((res) => setFormData(res.data));
   };
-  useEffect(() => {
-    apiCall();
-  }, []);
+
   const logout = () => {
     localStorage.clear("User");
     setUsername(null);
@@ -45,6 +43,10 @@ const Loggedin = () => {
       setFormData({ ...formData, ProfilePicture: imageUrl });
     }
   };
+
+  useEffect(() => {
+    handleGetAllUser();
+  }, []);
 
   return (
     <div className="w-100">
@@ -214,4 +216,4 @@ const Loggedin = () => {
   );
 };
 
-export default Loggedin;
+export default LoggedIn;

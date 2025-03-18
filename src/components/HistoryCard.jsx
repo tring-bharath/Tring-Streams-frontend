@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const HistoryCard = ({ video, showCards }) => {
   const url = import.meta.env.VITE_API_URL;
   const nav = useNavigate();
-  const [hover, setHover] = useState(false);
 
   const remove = async (video) => {
     await axios.delete(`${url}/video/removeFromHistory/${video._id}`);
@@ -16,11 +15,10 @@ const HistoryCard = ({ video, showCards }) => {
   const watchNow = () => {
     nav("/videoplayer", { state: video });
   };
+
   return (
     <div
-      className="video-card mx-2 mt-3 rounded-2"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}>
+      className="video-card mx-2 mt-3 rounded-2">
       <img
         src={video.thumbnail}
         alt="video thumbnail"
@@ -33,10 +31,10 @@ const HistoryCard = ({ video, showCards }) => {
         </h5>
         <div className="video-stats mb-2 d-flex align-items-center">
           {/* <span className="fw-semibold me-2">
-            <FaHeart size={12} className="text-danger" /> {video.likes}{" "}
+            <FaHeart size={12} className="text-danger" /> {video.likes}
           </span> */}
           <span className="fw-semibold me-3">
-            <FaEye size={13} className="" /> {video.views}
+            <FaEye size={13} className="text-primary" /> {video.views}
           </span>
           <button
             className="add-watchlist btn bg-danger text-white fw-semibold"

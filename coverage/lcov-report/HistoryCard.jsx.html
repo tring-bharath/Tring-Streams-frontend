@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.14% </span>
+                <span class="strong">7.69% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/14</span>
+                <span class='fraction'>1/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.14% </span>
+                <span class="strong">7.69% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/14</span>
+                <span class='fraction'>1/13</span>
             </div>
         
             
@@ -115,25 +115,18 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,23 +167,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import axios, { AxiosHeaders } from "axios";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import axios from "axios";
 import { useState } from "react";
 import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 &nbsp;
 const HistoryCard = <span class="fstat-no" title="function not covered" >({</span> video, showCards }) =&gt; {
-  const url = <span class="cstat-no" title="statement not covered" >process.env.VITE_API_URL;</span>
+  // const url = import.meta.env.VITE_API_URL;
   const nav = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const [hover, setHover] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
   const remove = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (video) =&gt; {</span>
-    const deletedVideo = <span class="cstat-no" title="statement not covered" >await axios.delete(</span>
-      `${url}/removeFromHistory/${video._id}`
-    ); 
+<span class="cstat-no" title="statement not covered" >    await axios.delete(`${url}/video/removeFromHistory/${video._id}`);</span>
 <span class="cstat-no" title="statement not covered" >    showCards();</span>
   };
 &nbsp;
@@ -213,11 +201,11 @@ const HistoryCard = <span class="fstat-no" title="function not covered" >({</spa
           {video.tags?.split(",")[0]}
         &lt;/h5&gt;
         &lt;div className="video-stats mb-2 d-flex align-items-center"&gt;
-          &lt;span className="fw-semibold me-2"&gt;
+          {/* &lt;span className="fw-semibold me-2"&gt;
             &lt;FaHeart size={12} className="text-danger" /&gt; {video.likes}{" "}
-          &lt;/span&gt;
+          &lt;/span&gt; */}
           &lt;span className="fw-semibold me-3"&gt;
-            &lt;FaEye size={13} className="" /&gt; {video.views}
+            &lt;FaEye size={13} className="text-primary" /&gt; {video.views}
           &lt;/span&gt;
           &lt;button
             className="add-watchlist btn bg-danger text-white fw-semibold"
@@ -226,9 +214,6 @@ const HistoryCard = <span class="fstat-no" title="function not covered" >({</spa
           &lt;/button&gt;
         &lt;/div&gt;
       &lt;/div&gt;
-      {hover &amp;&amp; (
-        &lt;div className="overlay-buttons d-flex"&gt;{/* &lt;h1&gt;hi&lt;/h1&gt; */}&lt;/div&gt;
-      )}
     &lt;/div&gt;
   );
 };
@@ -241,7 +226,7 @@ export default HistoryCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-17T06:35:30.529Z
+                at 2025-03-18T05:23:40.998Z
             </div>
         <script src="prettify.js"></script>
         <script>

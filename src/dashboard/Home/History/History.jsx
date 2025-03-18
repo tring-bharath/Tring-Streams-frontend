@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import HistoryCard from "../../components/HistoryCard";
-import { ProfileName } from "../../routes/AppRoutes";
+import React, { useEffect, useState } from "react";
+import HistoryCard from "../../../components/HistoryCard";
 import axios from "axios";
-import "../../css/History.css";
+import "./History.css";
 
 const History = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -21,6 +20,7 @@ const History = () => {
   useEffect(() => {
     showCards();
   }, []);
+
   return (
     <div className="history-container">
       {videos.length != 0 && <h1 className="ms-3">History</h1>}
