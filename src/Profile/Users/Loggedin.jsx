@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ProfileName } from "../../routes/AppRoutes";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
-
+import alter from '../../assets/signin.png'
 const LoggedIn = () => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
@@ -77,7 +77,7 @@ const LoggedIn = () => {
               <Form.Group className="mb-3">
                 <Form.Label>
                   <img
-                    src={formData?.ProfilePicture}
+                    src={formData?.ProfilePicture||alter}
                     className="rounded-circle"
                     style={{ width: "150px" }}
                   />
@@ -189,7 +189,7 @@ const LoggedIn = () => {
               className="card shadow-lg p-4 text-start"
               style={{ width: "350px" }}>
               <img
-                src={formData?.ProfilePicture}
+                src={formData?.ProfilePicture||alter}
                 alt={""}
                 className="rounded-circle mb-3 h5 display-5 bg-primary text-white"
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}

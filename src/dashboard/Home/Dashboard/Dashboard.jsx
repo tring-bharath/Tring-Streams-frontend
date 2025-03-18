@@ -66,7 +66,7 @@ const Dashboard = () => {
         dataLength={videos.length}
         next={handleGetAllVideos}
         hasMore={hasMore}
-        loader={<h4>Loading Videos</h4>}
+        loader={<h4 className="p-5">Loading Videos</h4>}
         className="infinite-scroll">
         <h1 className="ms-3">All Videos</h1>
         <div className="d-flex flex-wrap video-cards justify-content-center">
