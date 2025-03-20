@@ -35,10 +35,10 @@ const Login = () => {
       console.log(user);
 
       const userLogin = await axios.post(`${url}/user/loginUser`, user);
-
-      const username = userLogin.data.firstName;
-      const userId = userLogin.data._id;
-      const email = userLogin.data.email;
+      const token = userLogin.data.token;
+      const username = userLogin.data.user.firstName;
+      const userId = userLogin.data.user._id;
+      const email = userLogin.data.user.email;
       if (userLogin?.data == "WrongPassword") {
         toast.error("Invalid Credentials");
         return;
@@ -46,6 +46,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(username));
       localStorage.setItem("id", JSON.stringify(userId));
       localStorage.setItem("email", JSON.stringify(email));
+      localStorage.setItem("token",JSON.stringify(token));
       setUsername(username);
 
       nav("/");

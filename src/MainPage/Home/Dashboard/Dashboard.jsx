@@ -44,7 +44,7 @@ const Dashboard = () => {
   return (
     <div className="carousel-container">
       <ToastContainer />
-      <Carousel wrap={true} interval={2000} className="mb-3">
+      <Carousel wrap={true} interval={2000} className="mb-3" fade={true} keyboard={true}>
         {carousel?.map((video) => (
           <Carousel.Item>
             <img src={video?.thumbnail} alt="Banner" className="banner-image" />

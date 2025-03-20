@@ -69,8 +69,8 @@ const VideoCard = ({ video }) => {
         </div>
       </div>
       <Modal show={show} onHide={() => setShow(false)}>
-        <Modal.Header closeButton>Login!</Modal.Header>
-        <Modal.Body>You are not Logged in</Modal.Body>
+        <Modal.Header closeButton><h3>Login!</h3></Modal.Header>
+        <Modal.Body><h5>You are not Logged in</h5></Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => setShow(false)}>
             Close

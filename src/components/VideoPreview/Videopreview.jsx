@@ -4,12 +4,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import VideoCard from "../VideoCard/VideoCard";
 import axios from "axios";
 import ReactPlayer from "react-player";
+const api_url = import.meta.env.VITE_API_URL;
 
 const Videopreview = () => {
-  const api_url = import.meta.env.VITE_API_URL;
+  const [videoUrl,setVideoUrl]=useState();
   const location = useLocation();
   const video = location.state;
-
+  const id=video.id;
+  const handleGetVideo=async ()=>
+  {
+    try{
+     const res=await axios.get(`${api_url}/video/videoPreview/${id}`);
+     setVideoUrl(res.data.videoURL);
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+  }
+  handleGetVideo();
   let userId = JSON.parse(localStorage.getItem("id"));
   axios.put(`${api_url}/video/updateViews/${video.id}`);
   const newVideo = { ...video, userId: userId };
@@ -34,7 +47,7 @@ const Videopreview = () => {
   return (
     <div>
       <ReactPlayer
-        url={location.state.videoURL}
+        url={videoUrl}
         controls
         playing={true}
         pip={true}

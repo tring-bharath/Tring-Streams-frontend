@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../dashboard/Home/Home";
+import Home from "../MainPage/Home/Home";
 import Landingpage from "../Profile/Users/LandingPage/Landingpage";
-import Search from "../dashboard/Search";
-import Watchlist from "../dashboard/Watchlist";
+import Search from "../MainPage/Search";
+import Watchlist from "../MainPage/Watchlist";
 import Login from "../Profile/Auth/Login";
 import Profile from "../Profile/Users/Profiles";
 import Signup from "../Profile/signup";
-import Dashboard from "../dashboard/Home/Dashboard/Dashboard";
+import Dashboard from "../MainPage/Home/Dashboard/Dashboard";
 import Videopreview from "../components/VideoPreview/Videopreview";
 import ForgotPassword from "../Profile/Auth/ForgotPassword";
 import ResetPassword from "../Profile/Auth/ResetPassword";
