@@ -18,7 +18,7 @@ const LoggedIn = () => {
   };
 
   const logout = () => {
-    localStorage.clear("token");
+    localStorage.clear();
     setUsername(null);
   };
 
