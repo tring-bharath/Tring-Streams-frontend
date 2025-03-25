@@ -18,7 +18,7 @@ const LoggedIn = () => {
   };
 
   const logout = () => {
-    localStorage.clear("User");
+    localStorage.clear();
     setUsername(null);
   };
 
