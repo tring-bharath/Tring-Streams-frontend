@@ -12,7 +12,7 @@ const VideoCard = ({ video }) => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(false);
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("token");
 
   const watchNow = async () => {
     if (user) {

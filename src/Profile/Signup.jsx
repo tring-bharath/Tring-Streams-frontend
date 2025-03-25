@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-
+import { gql, useMutation } from "@apollo/client";
 export default function Signup() {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
@@ -30,11 +30,38 @@ export default function Signup() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const registerSchema = gql`
+    mutation MyMutation(
+      $email: String = ""
+      $password: String = ""
+      $firstName: String = ""
+      $lastName: String = ""
+    ) {
+      register(
+        email: $email
+        firstName: $firstName
+        lastName: $lastName
+        password: $password
+      )
+    }
+  `;
 
+  const [registerUser, { loading, error }] = useMutation(registerSchema);
   const onSubmit = async (data) => {
+    const { email, firstName, lastName, password } = data;
     try {
-      const user = await axios.post(`${url}/user/registerUser`, data);
-      nav("/Registration");
+      const res = await registerUser({
+        variables: {
+          email,
+          firstName,
+          lastName,
+          password,
+        },
+      });
+      if (res.data.register) {
+        alert(res.data.register);
+        nav("/Registration");
+      }
     } catch (error) {
       toast.error("Email already Exists");
     }
@@ -44,7 +71,7 @@ export default function Signup() {
     setToggleEye(!toggleEye);
     setPasswordType(passwordType == "password" ? "text" : "password");
   };
-  
+
   const confirmSetEye = () => {
     setConfirmToggleEye(!confirmToggleEye);
     setConfirmPasswordType(

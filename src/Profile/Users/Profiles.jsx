@@ -3,7 +3,7 @@ import LoggedOut from "./LoggedOut";
 import LoggedIn from "./LoggedIn";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = (localStorage.getItem("token"));
 
   return (
     <div className="d-flex w-100">

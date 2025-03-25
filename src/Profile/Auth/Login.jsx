@@ -7,7 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ProfileName } from "../../routes/AppRoutes";
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import '../../index.css'
+import "../../index.css";
+import { gql, useMutation } from "@apollo/client";
 
 const Login = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -29,31 +30,62 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const loginSchema = gql`
+    mutation MyMutation($email: String = "", $password: String = "") {
+      login(email: $email, password: $password) {
+        token
+      }
+    }
+  `;
+  const [loginUser,{loading,error}]=useMutation(loginSchema);
+  //postGraphIle implementation
   const onSubmit = async (user) => {
     try {
-      setEmail(user.email);
-      console.log(user);
-
-      const userLogin = await axios.post(`${url}/user/loginUser`, user);
-      const token = userLogin.data.token;
-      const username = userLogin.data.user.firstName;
-      const userId = userLogin.data.user._id;
-      const email = userLogin.data.user.email;
-      if (userLogin?.data == "WrongPassword") {
-        toast.error("Invalid Credentials");
-        return;
+      setUsername(user.name);
+      const {email,password}=user;
+      const res=await loginUser({
+        variables:{
+        email,
+        password
+        }
+      })
+      if(res.data.login)
+      {
+        console.table("response",res.data.login)
+        localStorage.setItem("token",res.data.login.token)
+        nav("/")
       }
-      localStorage.setItem("user", JSON.stringify(username));
-      localStorage.setItem("id", JSON.stringify(userId));
-      localStorage.setItem("email", JSON.stringify(email));
-      localStorage.setItem("token",JSON.stringify(token));
-      setUsername(username);
-
-      nav("/");
-    } catch (error) {
-      toast.error("Email Address not Registered");
+    } catch (err) {
+      console.table("err",err)
+      alert("cannot login")
     }
   };
+
+  //rest Implementation
+  // const onSubmit = async (user) => {
+  //   try {
+  //     setEmail(user.email);
+  //     console.log(user);
+  //     const userLogin = await axios.post(`${url}/user/loginUser`, user);
+  //     const token = userLogin.data.token;
+  //     const username = userLogin.data.user.firstName;
+  //     const userId = userLogin.data.user._id;
+  //     const email = userLogin.data.user.email;
+  //     if (userLogin?.data == "WrongPassword") {
+  //       toast.error("Invalid Credentials");
+  //       return;
+  //     }
+  //     localStorage.setItem("user", JSON.stringify(username));
+  //     localStorage.setItem("id", JSON.stringify(userId));
+  //     localStorage.setItem("email", JSON.stringify(email));
+  //     localStorage.setItem("token", JSON.stringify(token));
+  //     setUsername(username);
+
+  //     nav("/");
+  //   } catch (error) {
+  //     toast.error("Email Address not Registered");
+  //   }
+  // };
 
   const setEye = () => {
     setToggleEye(!toggleEye);
