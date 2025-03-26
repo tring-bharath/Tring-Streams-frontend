@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import VideoCard from "../VideoCard/VideoCard";
 import axios from "axios";
 import ReactPlayer from "react-player";
+import { gql, useMutation, useQuery } from "@apollo/client";
 const api_url = import.meta.env.VITE_API_URL;
 
 const Videopreview = () => {
@@ -11,18 +12,46 @@ const Videopreview = () => {
   const location = useLocation();
   const video = location.state;
   const id=video.id;
-  const handleGetVideo=async ()=>
-  {
-    try{
-     const res=await axios.get(`${api_url}/video/videoPreview/${id}`);
-     setVideoUrl(res.data.videoURL);
-    }
-    catch(err)
-    {
-      console.log(err);
-    }
+  const query = gql`
+  query user($id: Int = 10) {
+  allVideoById(id: $id) {
+    id
+    likes
+    thumbnail
+    videoUrl
+    tags
+    views
   }
-  handleGetVideo();
+}`
+const historyMutation=gql`
+mutation user($videoId: Int = 111179, $userId: Int = 1) {
+  createUserHistory(
+    input: {userHistory: {allVideosId: $videoId, userId: $userId}}
+  )
+ {
+    clientMutationId
+  }
+}
+`
+  const [createHistory,{loadingHistory,errorHistory}]=useMutation(historyMutation);
+  const {loading, error,data}=useQuery(query,{
+    variables:{id},
+    context: {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+    },
+  });
+
+  useEffect(()=>
+  {
+    setVideoUrl(data?.allVideoById?.videoUrl);
+  },[data])
+
+  if(errorHistory)
+  {
+    console.log(errorHistory);
+  }
   let userId = JSON.parse(localStorage.getItem("id"));
   axios.put(`${api_url}/video/updateViews/${video.id}`);
   const newVideo = { ...video, userId: userId };
@@ -42,6 +71,22 @@ const Videopreview = () => {
   };
   useEffect(() => {
     apicall();
+    console.table({videoId:id,userId});
+    
+    createHistory({
+      variables: { videoId:id,userId},
+      context:
+          {
+            headers:
+            {
+              Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+          }
+    });
+    if(errorHistory)
+      {
+        console.log("errroe");
+      }
   }, []);
 
   return (

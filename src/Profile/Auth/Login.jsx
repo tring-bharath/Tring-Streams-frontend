@@ -41,7 +41,6 @@ const Login = () => {
   //postGraphIle implementation
   const onSubmit = async (user) => {
     try {
-      setUsername(user.name);
       const {email,password}=user;
       const res=await loginUser({
         variables:{
@@ -52,7 +51,8 @@ const Login = () => {
       if(res.data.login)
       {
         console.table("response",res.data.login)
-        localStorage.setItem("token",res.data.login.token)
+        localStorage.setItem("token",res.data.login.token);
+        localStorage.setItem("user",JSON.stringify(user.email));
         nav("/")
       }
     } catch (err) {

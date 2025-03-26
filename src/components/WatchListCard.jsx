@@ -1,17 +1,40 @@
-import axios from "axios";
+import { gql, useMutation } from "@apollo/client";
 import React, {  useState } from "react";
 import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-const WatchListCard = ({ video, showCards }) => {
+
+const deleteCard=gql`
+mutation user($videoId: Int = 10, $userId: Int = 10) {
+  deleteUserWatchlistByAllVideosIdAndUserId(
+    input: {allVideosId: $videoId, userId: $userId}
+  ) {
+    clientMutationId
+    deletedUserWatchlistId
+  }
+}
+`
+const WatchListCard = ({video}) => {
     const url = import.meta.env.VITE_API_URL;
     const nav = useNavigate();
     const [hover, setHover] = useState(false);
-  
+    const userId = JSON.parse(localStorage.getItem("id"));
+    video=video.allVideoByAllVideosId;
+    const [removeFromWatchList,{loading,error}]=useMutation(deleteCard);
     const remove = async (video) => {
-      const deletedVideo = await axios.delete(
-        `${url}/video/removeFromWatchList/${video._id}`
-      );
-      showCards();
+      const res=await removeFromWatchList(
+        {
+          variables:{videoId:video.id,userId},
+          context:
+          {
+            headers:
+            {
+              Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        }
+      )
+      console.log(res);
+      
     };
   
     const watchNow = (Video) => {

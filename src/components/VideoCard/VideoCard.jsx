@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Image, Modal } from "react-bootstrap";
 import "./VideoCard.css";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -22,15 +23,39 @@ const VideoCard = ({ video }) => {
       setShow(true);
     }
   };
+  const watchListMutation = gql`
+    mutation MyMutation($videoId: Int = 111179, $userId: Int = 1) {
+      createUserWatchlist(
+        input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
+      ) {
+        clientMutationId
+      }
+    }
+  `;
+  const [createWatchList, { loadingWatchList, errorWatchList }] = useMutation(watchListMutation);
 
   const watchList = async (video) => {
     setIsBookMarked(true);
-    const userId = JSON.parse(localStorage.getItem("id"));
-    const newVideo = { ...video, userId: userId };
-    await axios
-      .post(`${url}/video/insert`, newVideo)
-      .then((res) => toast.success("Video added to Watch List"))
-      .catch((err) => toast.error("Already in the watchList"));
+    const userId = await JSON.parse(localStorage.getItem("id"));
+    console.table(video.id, userId);
+
+    createWatchList({
+      variables: { videoId: video.id, userId },
+    });
+    toast.success("Video added to Watch List")
+    if(errorWatchList)
+    {
+      toast.error("Already in the watchList");
+    }
+    else
+    {
+      toast.success("Video added to Watch List")
+    }
+    // const newVideo = { ...video, userId: userId };
+    // await axios
+    //   .post(`${url}/video/insert`, newVideo)
+    //   .then((res) => toast.success("Video added to Watch List"))
+    //   .catch((err) => toast.error("Already in the watchList"));
   };
 
   const setLogin = () => {
@@ -69,8 +94,12 @@ const VideoCard = ({ video }) => {
         </div>
       </div>
       <Modal show={show} onHide={() => setShow(false)}>
-        <Modal.Header closeButton><h3>Login!</h3></Modal.Header>
-        <Modal.Body><h5>You are not Logged in</h5></Modal.Body>
+        <Modal.Header closeButton>
+          <h3>Login!</h3>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>You are not Logged in</h5>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => setShow(false)}>
             Close
