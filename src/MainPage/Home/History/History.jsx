@@ -1,41 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HistoryCard from "../../../components/HistoryCard";
 import axios from "axios";
 import "./History.css";
 import { gql, useQuery } from "@apollo/client";
+import { getHistories, getUser } from "../../../graphql/query";
+import { globalData } from "../Home";
 
-const getHistories=gql`
-query MyQuery($userId: Int!) {
-  allUserHistories(condition: {userId: $userId}) {
-    nodes {
-      allVideoByAllVideosId {
-        id
-        likes
-        thumbnail
-        views
-        tags
-      }
-    }
-  }
-}
-`
+
 const History = () => {
   const url = import.meta.env.VITE_API_URL;
   const [videos, setVideos] = useState([]);
-  const userId = JSON.parse(localStorage.getItem("id"));
+  const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
+  const {userData,setUserData}=useContext(globalData);
 
-
-  const {loading,error,data}=useQuery(getHistories,{
-    variables:{userId}
+  useEffect(() => {
+    if (handleGetUserData && handleGetUserData.getUserData) {
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
+  
+  const { loading, error, data } = useQuery(getHistories, {
+    variables: { userId: userData?.id },
+    skip: !userData,
   });
-
-
-  const user = (localStorage.getItem("token"));
 
   useEffect(() => {
     setVideos(data?.allUserHistories?.nodes);
   }, [data]);
-
 
   return (
     <div className="history-container">

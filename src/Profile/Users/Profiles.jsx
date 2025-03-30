@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LoggedOut from "./LoggedOut";
 import LoggedIn from "./LoggedIn";
+import { globalData } from "../../MainPage/Home/Home";
 
 const Profile = () => {
-  const user=JSON.parse(localStorage.getItem("user"));
-  
 
+  const {userData,setUserData}=useContext(globalData);
+  const isUserLoggedIn = userData && Object.keys(userData).length > 0;  
   return (
     <div className="d-flex w-100">
-      {user == null ? <LoggedOut /> : <LoggedIn />}
+      {isUserLoggedIn ? <LoggedIn /> : <LoggedOut /> }
     </div>
   );
 };

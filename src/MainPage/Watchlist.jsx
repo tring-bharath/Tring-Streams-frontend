@@ -1,56 +1,47 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import WatchListCard from "../components/WatchListCard";
 import { gql, useQuery } from "@apollo/client";
+import { getUser, getWatchList } from "../graphql/query";
+import { globalData } from "./Home/Home";
 
-  const getWatchList=gql`
-  query MyQuery($userId: Int!) {
-  allUserWatchlists(condition: {userId: $userId}) {
-    nodes {
-      allVideoByAllVideosId {
-        id
-        likes
-        tags
-        thumbnail
-        views
-      }
-    }
-  }
-}
-  `
+
 
 const Watchlist = () => {
   const url = import.meta.env.VITE_API_URL;
   const [videos, setVideos] = useState([]);
-  const userId = JSON.parse(localStorage.getItem("id"));
   const navigate = useNavigate();
 
   const loginNavigate = () => {
     navigate("/registration");
   };
 
-  const {loading,error,data}=useQuery(getWatchList,{
-    variables:{userId}
+  const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
+  const {userData,setUserData}=useContext(globalData);
+
+  useEffect(() => {
+    if (handleGetUserData && handleGetUserData.getUserData) {
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
+  
+  const { loading, error, data,refetch } = useQuery(getWatchList, {
+    variables: { userId: userData?.id },
+    skip: !userData,
   });
-
-
-  const user = (localStorage.getItem("token"));
-
   useEffect(() => {
     setVideos(data?.allUserWatchlists?.nodes);
   }, [data]);
 
   return (
     <div className="container w-100">
-      {user != null ? (
+      {userData != null ? (
         <div className="userAvailable">
           <p className="h1 ms-2 mt-2">Watch List</p>
-          {videos?.length != 0 ? (
+          {videos?.length != null ? (
             <div className="d-flex px-2 flex-wrap video-cards mt-4">
               {videos?.map((video) => (
-                <WatchListCard video={video} />
+                <WatchListCard video={video} refetch={refetch}/>
               ))}
             </div>
           ) : (

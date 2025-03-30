@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { gql, useMutation } from "@apollo/client";
+import { registerSchema } from "../graphql/mutation";
 export default function Signup() {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
@@ -30,21 +31,6 @@ export default function Signup() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const registerSchema = gql`
-    mutation MyMutation(
-      $email: String = ""
-      $password: String = ""
-      $firstName: String = ""
-      $lastName: String = ""
-    ) {
-      register(
-        email: $email
-        firstName: $firstName
-        lastName: $lastName
-        password: $password
-      )
-    }
-  `;
 
   const [registerUser, { loading, error }] = useMutation(registerSchema);
   const onSubmit = async (data) => {

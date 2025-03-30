@@ -1,14 +1,18 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./SideBar/Sidebar";
-import { ToastContainer } from "react-toastify";
+
+export const globalData=createContext();
 
 const Home = () => {
+  
+  const [userData,setUserData]=useState({});
   return (
     <div className="d-flex">
-      <ToastContainer />
+      <globalData.Provider value={{userData,setUserData}}>
       <Sidebar/>
       <Outlet className="outlet position-absolute" />
+      </globalData.Provider>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../index.css";
 import { gql, useMutation } from "@apollo/client";
+import { loginSchema } from "../../graphql/mutation";
 
 const Login = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -30,13 +31,7 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const loginSchema = gql`
-    mutation MyMutation($email: String = "", $password: String = "") {
-      login(email: $email, password: $password) {
-        token
-      }
-    }
-  `;
+
   const [loginUser,{loading,error}]=useMutation(loginSchema);
   //postGraphIle implementation
   const onSubmit = async (user) => {

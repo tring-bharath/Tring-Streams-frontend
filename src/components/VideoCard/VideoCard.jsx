@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { FaBookmark, FaEye, FaRegBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Button, Image, Modal } from "react-bootstrap";
 import "./VideoCard.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { getUser } from "../../graphql/query";
+import { globalData } from "../../MainPage/Home/Home";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -14,6 +16,14 @@ const VideoCard = ({ video }) => {
   const [show, setShow] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const user = localStorage.getItem("token");
+    const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
+    const {userData,setUserData}=useContext(globalData);
+  
+    useEffect(() => {
+      if (handleGetUserData && handleGetUserData.getUserData) {
+        setUserData(handleGetUserData.getUserData);
+      }
+    }, [handleGetUserData]);
 
   const watchNow = async () => {
     if (user) {
@@ -24,7 +34,7 @@ const VideoCard = ({ video }) => {
     }
   };
   const watchListMutation = gql`
-    mutation MyMutation($videoId: Int = 111179, $userId: Int = 1) {
+    mutation user($videoId: Int!, $userId: Int!) {
       createUserWatchlist(
         input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
       ) {
@@ -32,7 +42,7 @@ const VideoCard = ({ video }) => {
       }
     }
   `;
-  const [createWatchList, { loadingWatchList, errorWatchList }] = useMutation(watchListMutation);
+  const [createWatchList, { loading:loadingWatchList, error:errorWatchList }] = useMutation(watchListMutation);
 
   const watchList = async (video) => {
     setIsBookMarked(true);
@@ -40,7 +50,7 @@ const VideoCard = ({ video }) => {
     console.table(video.id, userId);
 
     createWatchList({
-      variables: { videoId: video.id, userId },
+      variables: { videoId: video.id, userId:userData.id },
     });
     toast.success("Video added to Watch List")
     if(errorWatchList)
@@ -51,17 +61,12 @@ const VideoCard = ({ video }) => {
     {
       toast.success("Video added to Watch List")
     }
-    // const newVideo = { ...video, userId: userId };
-    // await axios
-    //   .post(`${url}/video/insert`, newVideo)
-    //   .then((res) => toast.success("Video added to Watch List"))
-    //   .catch((err) => toast.error("Already in the watchList"));
   };
 
   const setLogin = () => {
     nav("/registration");
   };
-
+  
   return (
     <div className="video-card rounded-1 pb-2">
       <Image
@@ -81,7 +86,7 @@ const VideoCard = ({ video }) => {
             <FaEye className="text-primary" /> {video.views}
           </span>
           <div className="overlay-buttons d-flex px-2 my-1">
-            {user != null ? (
+            {userData&&Object.keys(userData).length>0 ? (
               <button
                 className="add-watchlist button rounded px-2 py-1"
                 onClick={() => watchList(video)}>

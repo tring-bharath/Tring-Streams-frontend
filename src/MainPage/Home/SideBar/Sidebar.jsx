@@ -5,23 +5,28 @@ import { FaHome, FaBookmark, FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Sidebar.css";
+import { ToastContainer } from "react-toastify";
+import { useQuery } from "@apollo/client";
+import { getUser } from "../../../graphql/query";
+import { globalData } from "../Home";
 
 const Sidebar = () => {
   const location = useLocation();
-  const { setUsername } = useContext(ProfileName);
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  setUsername(user);
   const isActive = (path) => {
     return location.pathname === path;
   };
-
-  useEffect(() => {
-    setUsername(user);
-  }, [user]);
+    const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
+    const {userData,setUserData}=useContext(globalData);
+  
+    useEffect(() => {
+      if (handleGetUserData && handleGetUserData.getUserData) {
+        setUserData(handleGetUserData.getUserData);
+      }
+    }, [handleGetUserData]);
 
   return (
     <div className="sidebar p-3 d-flex flex-column justify-content-center gap-4">
+      <ToastContainer />
       <Link
         to="/"
         className={`sidebar-link d-flex align-items-center py-3 px-2 rounded text-decoration-none ${
@@ -56,7 +61,7 @@ const Sidebar = () => {
         }`}>
         <CgProfile size={24} className=" sidebar-icons" />
         <h5 className="username sidebar-items d-flex align-self-center">
-          {user == null ? "Profile" : user}
+          {userData?.firstName == null ? "Profile" : userData?.firstName}
         </h5>
       </Link>
     </div>

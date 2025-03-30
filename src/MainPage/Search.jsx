@@ -3,23 +3,27 @@ import { FaSearch } from "react-icons/fa";
 import VideoCard from "../components/VideoCard/VideoCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { gql, useQuery } from "@apollo/client";
+import { searchSchema } from "../graphql/query";
+
+
 const Search = () => {
-  const url = import.meta.env.VITE_API_URL;
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [videos, setVideos] = useState([]);
 
-  const handleGetAllVideos = () => {
-    fetch(`${url}/video/search?tag=${search}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setVideos(data);
-      });
-  };
+  const { loading, error, data, refetch } = useQuery(searchSchema, {
+    variables: { tag: "" }
+  });
 
   useEffect(() => {
-    handleGetAllVideos();
+    refetch({ tag: search }); // Refetch when search changes
   }, [search]);
 
+  useEffect(() => {
+    if (data && data.allAllVideos) {
+      setVideos(data.allAllVideos.nodes);
+    }
+  }, [data]);
   return (
     <div className=" d-flex flex-column align-items-center w-100">
       <ToastContainer />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import VideoCard from "../../../components/VideoCard/VideoCard";
@@ -7,52 +7,50 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import History from "../History/History";
 import { ToastContainer } from "react-toastify";
 import "./Dashboard.css";
-
-const GET_VIDEOS = gql
-`
-  query guest {
-    allAllVideos {
-      nodes {
-        id
-        tags
-        likes
-        thumbnail
-        views
-      }
-    }
-  }
-`
-;
+import { globalData } from "../Home";
+import { getCarousel, getUser, getVideos } from "../../../graphql/query";
 
 const Dashboard = () => {
   const nav = useNavigate();
   const [videos, setVideos] = useState([]);
   const [carousel, setCarousel] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-
-  const { loading, error, data } = useQuery(GET_VIDEOS, {
-    context: {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-    },
-  });
-
+  const { userData, setUserData } = useContext(globalData);
+  const {
+    loading: userLoading,
+    error: userError,
+    data: handleGetUserData,
+  } = useQuery(getUser,{fetchPolicy:"no-cache"});
+  const {
+    loading: videosLoading,
+    error: videosError,
+    data: videosData,
+  } = useQuery(getVideos,{fetchPolicy:"no-cache"});
+  const {
+    loading: carouselLoading,
+    error: carouselError,
+    data: carouselData,
+  } = useQuery(getCarousel,{fetchPolicy:"no-cache"});
   useEffect(() => {
-    console.log(JSON.stringify(`Bearer ${localStorage.getItem("token")}`));
-    
-    if (data && data.allAllVideos) {
-      setVideos(data.allAllVideos.nodes);
+    if (videosData && videosData.allAllVideos) {
+      setVideos(videosData.allAllVideos.nodes);
     }
-  }, [data]);
-
-  if (loading) return <h1>Loading...</h1>;
-  if (error) return <h1>Error fetching videos!</h1>;
-
+  }, [videosData]);
+  useEffect(() => {
+    if (carouselData && carouselData.allAllVideos) {
+      setCarousel(carouselData.allAllVideos.nodes);
+    }
+  }, [carouselData]);
+  useEffect(() => {
+    if(handleGetUserData&&handleGetUserData.getUserData)
+    {console.log(handleGetUserData.getUserData);
+    
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
   return (
     <div className="carousel-container">
-      <ToastContainer />
-      <Carousel wrap interval={2000} className="mb-3" fade keyboard>
+      <Carousel wrap interval={2000} className="mb-3" fade={false} keyboard>
         {carousel?.map((video) => (
           <Carousel.Item key={video.id}>
             <img src={video.thumbnail} alt="Banner" className="banner-image" />

@@ -3,13 +3,16 @@ import { ProfileName } from "../../routes/AppRoutes";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import alter from '../../assets/signin.png'
+import { useMutation } from "@apollo/client";
+import { logoutSchema } from "../../graphql/mutation";
+import { globalData } from "../../MainPage/Home/Home";
 const LoggedIn = () => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const email = JSON.parse(localStorage.getItem("email"));
   const [formData, setFormData] = useState({ email });
-  const { userName, setUsername } = useContext(ProfileName);
+  const { userData,setUserData } = useContext(globalData);
 
   const handleGetAllUser = async () => {
     await axios
@@ -17,9 +20,12 @@ const LoggedIn = () => {
       .then((res) => setFormData(res.data));
   };
 
-  const logout = () => {
-    localStorage.clear();
-    setUsername(null);
+  const [handleLogout,{loading,error}]=useMutation(logoutSchema);
+  const logout = async() => {
+    const res=await handleLogout();
+    console.log(res);
+    setUserData();
+    setShow(false);
   };
 
   const handleEditChange = (e) => {
@@ -194,7 +200,6 @@ const LoggedIn = () => {
                 className="rounded-circle mb-3 h5 display-5 bg-primary text-white"
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}
               />
-              <h3>{userName}</h3>
               <h6 className="text-muted">
                 {formData.email && <div>Mail:{formData?.email}</div>}
               </h6>
