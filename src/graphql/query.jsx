@@ -9,6 +9,20 @@ getUserData {
 }
 }
 `
+export const getUserDetails=gql`
+query user {
+getUserData {
+  email
+  firstName
+  id
+  dateOfBirth
+  gender
+  phoneNumber
+  location
+  profilePicture
+}
+}
+`
 export const searchSchema=gql`
 query guest($tag: String = "") {
   allAllVideos(filter: {tags: {includesInsensitive: $tag}}) {

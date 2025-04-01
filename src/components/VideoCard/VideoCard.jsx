@@ -8,7 +8,7 @@ import { Button, Image, Modal } from "react-bootstrap";
 import "./VideoCard.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { getUser } from "../../graphql/query";
-import { globalData } from "../../MainPage/Home/Home";
+import { globalData } from "../../routes/AppRoutes";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -24,9 +24,9 @@ const VideoCard = ({ video }) => {
         setUserData(handleGetUserData.getUserData);
       }
     }, [handleGetUserData]);
-
+    
   const watchNow = async () => {
-    if (user) {
+    if (userData?.id) {
       nav("/videoplayer", { state: video });
       window.scrollTo(0, 0);
     } else {

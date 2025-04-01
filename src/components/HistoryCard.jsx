@@ -1,9 +1,9 @@
 import { gql, useMutation } from "@apollo/client";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { globalData } from "../MainPage/Home/Home";
+import { globalData } from "../routes/AppRoutes";
 const deleteCard=gql`
 mutation user($videoId: Int = 10, $userId: Int = 10) {
   deleteUserHistoryByAllVideosIdAndUserId(
@@ -14,7 +14,7 @@ mutation user($videoId: Int = 10, $userId: Int = 10) {
   }
 }
 `
-const HistoryCard = ({ video }) => {
+const HistoryCard = ({ video,refetch }) => {
   const url = import.meta.env.VITE_API_URL;
   const nav = useNavigate();
   const userId = JSON.parse(localStorage.getItem("id"));
@@ -27,12 +27,19 @@ const HistoryCard = ({ video }) => {
         variables:{videoId:video.id,userId:userData.id}
       }
     )
+    refetch(
+      {
+        variables:{userId:userData.id}
+      }
+    )
     console.log(res);
   };
 
   const watchNow = () => {
     nav("/videoplayer", { state: video });
   };
+
+
 
   return (
     <div

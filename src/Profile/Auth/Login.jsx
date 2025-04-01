@@ -4,7 +4,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { ProfileName } from "../../routes/AppRoutes";
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../index.css";
@@ -15,7 +14,6 @@ const Login = () => {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
-  const { setUsername } = useContext(ProfileName);
   const [email, setEmail] = useState();
 
   const nav = useNavigate();

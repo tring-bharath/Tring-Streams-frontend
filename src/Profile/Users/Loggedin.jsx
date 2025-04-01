@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ProfileName } from "../../routes/AppRoutes";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import alter from '../../assets/signin.png'
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { logoutSchema } from "../../graphql/mutation";
-import { globalData } from "../../MainPage/Home/Home";
+import { globalData } from "../../routes/AppRoutes";
+import {  getUserDetails } from "../../graphql/query";
 const LoggedIn = () => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
@@ -13,12 +13,18 @@ const LoggedIn = () => {
   const email = JSON.parse(localStorage.getItem("email"));
   const [formData, setFormData] = useState({ email });
   const { userData,setUserData } = useContext(globalData);
-
-  const handleGetAllUser = async () => {
-    await axios
-      .post(`${url}/user/getUser`, { email })
-      .then((res) => setFormData(res.data));
-  };
+  const {
+    loading: userLoading,
+    error: userError,
+    data: handleGetUserData,
+  } = useQuery(getUserDetails,{fetchPolicy:"no-cache"});
+  useEffect(() => {
+    if(handleGetUserData&&handleGetUserData.getUserData)
+    {console.log(handleGetUserData.getUserData);
+      setFormData(handleGetUserData.getUserData);
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
 
   const [handleLogout,{loading,error}]=useMutation(logoutSchema);
   const logout = async() => {
@@ -50,9 +56,7 @@ const LoggedIn = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetAllUser();
-  }, []);
+
 
   return (
     <div className="w-100">

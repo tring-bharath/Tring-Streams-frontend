@@ -2,7 +2,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { globalData } from "../MainPage/Home/Home";
+import { globalData } from "../routes/AppRoutes";
 import { getUser } from "../graphql/query";
 
 const deleteCard = gql`

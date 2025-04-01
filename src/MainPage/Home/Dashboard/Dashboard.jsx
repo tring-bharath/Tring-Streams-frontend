@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import History from "../History/History";
 import { ToastContainer } from "react-toastify";
 import "./Dashboard.css";
-import { globalData } from "../Home";
+import { globalData } from "../../../routes/AppRoutes";
 import { getCarousel, getUser, getVideos } from "../../../graphql/query";
 
 const Dashboard = () => {
@@ -21,6 +21,13 @@ const Dashboard = () => {
     error: userError,
     data: handleGetUserData,
   } = useQuery(getUser,{fetchPolicy:"no-cache"});
+  useEffect(() => {
+    if(handleGetUserData&&handleGetUserData.getUserData)
+    {console.log(handleGetUserData.getUserData);
+    
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
   const {
     loading: videosLoading,
     error: videosError,
@@ -41,13 +48,6 @@ const Dashboard = () => {
       setCarousel(carouselData.allAllVideos.nodes);
     }
   }, [carouselData]);
-  useEffect(() => {
-    if(handleGetUserData&&handleGetUserData.getUserData)
-    {console.log(handleGetUserData.getUserData);
-    
-      setUserData(handleGetUserData.getUserData);
-    }
-  }, [handleGetUserData]);
   return (
     <div className="carousel-container">
       <Carousel wrap interval={2000} className="mb-3" fade={false} keyboard>

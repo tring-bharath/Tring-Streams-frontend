@@ -1,4 +1,3 @@
-import { ProfileName } from "../../../routes/AppRoutes";
 import React, { useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaBookmark, FaSearch } from "react-icons/fa";
@@ -8,7 +7,7 @@ import "./Sidebar.css";
 import { ToastContainer } from "react-toastify";
 import { useQuery } from "@apollo/client";
 import { getUser } from "../../../graphql/query";
-import { globalData } from "../Home";
+import { globalData } from "../../../routes/AppRoutes";
 
 const Sidebar = () => {
   const location = useLocation();

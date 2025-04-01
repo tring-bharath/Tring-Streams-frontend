@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import LoggedOut from "./LoggedOut";
 import LoggedIn from "./LoggedIn";
-import { globalData } from "../../MainPage/Home/Home";
+import { globalData } from "../../routes/AppRoutes";
 
 const Profile = () => {
 

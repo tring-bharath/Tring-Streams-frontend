@@ -6,18 +6,18 @@ import Search from "../MainPage/Search";
 import Watchlist from "../MainPage/Watchlist";
 import Login from "../Profile/Auth/Login";
 import Profile from "../Profile/Users/Profiles";
-import Signup from "../Profile/signup";
+import Signup from "../Profile/Signup";
 import Dashboard from "../MainPage/Home/Dashboard/Dashboard";
 import Videopreview from "../components/VideoPreview/Videopreview";
 import ForgotPassword from "../Profile/Auth/ForgotPassword";
 import ResetPassword from "../Profile/Auth/ResetPassword";
 
-export const ProfileName = createContext();
+export const globalData = createContext();
 const AppRoutes = () => {
-  const [userName, setUsername] = useState();
+  const [userData,setUserData] = useState({});
 
   return (
-    <ProfileName.Provider value={{ userName, setUsername }}>
+    <globalData.Provider value={{ userData,setUserData }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}>
@@ -25,6 +25,7 @@ const AppRoutes = () => {
             <Route path="Search" element={<Search />} />
             <Route path="WatchList" element={<Watchlist />} />
             <Route path="profile" element={<Profile />} />
+          <Route path="/videoPlayer" element={<Videopreview />} />
           </Route>
           <Route path="/registration" element={<Landingpage />}>
             <Route path="" element={<Login />} />
@@ -32,10 +33,9 @@ const AppRoutes = () => {
           </Route>
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
-          <Route path="/videoPlayer" element={<Videopreview />} />
         </Routes>
       </BrowserRouter>
-    </ProfileName.Provider>
+    </globalData.Provider>
   );
 };
 

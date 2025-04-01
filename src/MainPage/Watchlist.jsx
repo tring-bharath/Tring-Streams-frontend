@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import WatchListCard from "../components/WatchListCard";
 import { gql, useQuery } from "@apollo/client";
 import { getUser, getWatchList } from "../graphql/query";
-import { globalData } from "./Home/Home";
+import { globalData } from "../routes/AppRoutes";
 
 
 
@@ -32,7 +32,14 @@ const Watchlist = () => {
   useEffect(() => {
     setVideos(data?.allUserWatchlists?.nodes);
   }, [data]);
-
+  useEffect(()=>
+    {
+      refetch(
+        {
+          variables:{userId:userData.id}
+        }
+      )
+    },[])
   return (
     <div className="container w-100">
       {userData != null ? (

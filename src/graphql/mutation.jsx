@@ -25,3 +25,13 @@ export const registerSchema = gql`
     )
   }
 `;
+export const updateUserSchema=gql 
+`
+mutation user($dateOfBirth: Datetime = "", $firstName: String = "", $gender: UserGenderEnum = MALE, $lastName: String = "", $location: String = "", $phoneNumber: String = "", $profilePicture: String = "", $id: Int = 10) {
+  updateUserById(
+    input: {userPatch: {dateOfBirth: $dateOfBirth, firstName: $firstName, gender: $gender, lastName: $lastName, location: $location, phoneNumber: $phoneNumber, profilePicture: $profilePicture}, id: $id}
+  ) {
+    clientMutationId
+  }
+}
+`
