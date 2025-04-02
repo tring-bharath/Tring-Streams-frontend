@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "./Dashboard.css";
 import { globalData } from "../../../routes/AppRoutes";
 import { getCarousel, getUser, getVideos } from "../../../graphql/query";
-
+import FullPageLoader from "../../../components/VideoPreview/fullPageLoader/fullPageLoader";
 const Dashboard = () => {
   const nav = useNavigate();
   const [videos, setVideos] = useState([]);
@@ -48,8 +48,13 @@ const Dashboard = () => {
       setCarousel(carouselData.allAllVideos.nodes);
     }
   }, [carouselData]);
+  if(videosLoading||carouselLoading||userLoading)
+  {
+    return <FullPageLoader/>
+  }
   return (
     <div className="carousel-container">
+      <ToastContainer />
       <Carousel wrap interval={2000} className="mb-3" fade={false} keyboard>
         {carousel?.map((video) => (
           <Carousel.Item key={video.id}>

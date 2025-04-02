@@ -25,8 +25,8 @@ const AppRoutes = () => {
             <Route path="Search" element={<Search />} />
             <Route path="WatchList" element={<Watchlist />} />
             <Route path="profile" element={<Profile />} />
-          <Route path="/videoPlayer" element={<Videopreview />} />
           </Route>
+          <Route path="/videoPlayer" element={<Videopreview />} />
           <Route path="/registration" element={<Landingpage />}>
             <Route path="" element={<Login />} />
             <Route path="signup" element={<Signup />} />

@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { FaBookmark, FaEye, FaRegBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Button, Image, Modal } from "react-bootstrap";
-import "./VideoCard.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { getUser } from "../../graphql/query";
 import { globalData } from "../../routes/AppRoutes";
+import "react-toastify/dist/ReactToastify.css";
+import "./VideoCard.css";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -42,30 +41,27 @@ const VideoCard = ({ video }) => {
       }
     }
   `;
-  const [createWatchList, { loading:loadingWatchList, error:errorWatchList }] = useMutation(watchListMutation);
+  const [createWatchList] = useMutation(watchListMutation,{
+    onCompleted:()=>
+    {
+      toast.success("Added to WatchList");
+    }
+    ,
+    onError:()=>
+    {
+      toast.error("Already in the WatchList")
+    }
+  });
 
   const watchList = async (video) => {
     setIsBookMarked(true);
     const userId = await JSON.parse(localStorage.getItem("id"));
     console.table(video.id, userId);
-
-    createWatchList({
-      variables: { videoId: video.id, userId:userData.id },
-    });
-    toast.success("Video added to Watch List")
-    if(errorWatchList)
-    {
-      toast.error("Already in the watchList");
-    }
-    else
-    {
-      toast.success("Video added to Watch List")
-    }
+      createWatchList({
+        variables: { videoId: video.id, userId:userData.id },
+      });
   };
 
-  const setLogin = () => {
-    nav("/registration");
-  };
   
   return (
     <div className="video-card rounded-1 pb-2">

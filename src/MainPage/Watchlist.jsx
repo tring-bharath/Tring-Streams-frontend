@@ -45,7 +45,7 @@ const Watchlist = () => {
       {userData != null ? (
         <div className="userAvailable">
           <p className="h1 ms-2 mt-2">Watch List</p>
-          {videos?.length != null ? (
+          {videos?.length >0 ? (
             <div className="d-flex px-2 flex-wrap video-cards mt-4">
               {videos?.map((video) => (
                 <WatchListCard video={video} refetch={refetch}/>

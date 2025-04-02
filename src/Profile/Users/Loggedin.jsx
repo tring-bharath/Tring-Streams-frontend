@@ -1,34 +1,42 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import axios from "axios";
-import alter from '../../assets/signin.png'
+import alter from "../../assets/signin.png";
 import { useMutation, useQuery } from "@apollo/client";
-import { logoutSchema } from "../../graphql/mutation";
+import { logoutSchema, updateUserSchema } from "../../graphql/mutation";
 import { globalData } from "../../routes/AppRoutes";
-import {  getUserDetails } from "../../graphql/query";
+import { getUserDetails } from "../../graphql/query";
 const LoggedIn = () => {
   const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
-  const email = JSON.parse(localStorage.getItem("email"));
-  const [formData, setFormData] = useState({ email });
-  const { userData,setUserData } = useContext(globalData);
+  const [formData, setFormData] = useState({});
+  const { userData, setUserData } = useContext(globalData);
   const {
     loading: userLoading,
     error: userError,
     data: handleGetUserData,
-  } = useQuery(getUserDetails,{fetchPolicy:"no-cache"});
+  } = useQuery(getUserDetails, {
+    fetchPolicy: "no-cache",
+    onError: (err) => console.log(err),
+  });
+
+  const [updateUserData, { loading: userDataLoading, error: userDataError }] =
+    useMutation(updateUserSchema, { fetchPolicy: "no-cache" });
   useEffect(() => {
-    if(handleGetUserData&&handleGetUserData.getUserData)
-    {console.log(handleGetUserData.getUserData);
-      setFormData(handleGetUserData.getUserData);
-      setUserData(handleGetUserData.getUserData);
+    if (handleGetUserData?.getUserData) {
+      const userDetails = handleGetUserData.getUserData;
+      const formattedDate =
+        userDetails.dateOfBirth && !isNaN(new Date(userDetails.dateOfBirth)) 
+          ? new Date(userDetails.dateOfBirth).toISOString().split("T")[0]
+          : "";
+      setFormData({ ...userDetails, dateOfBirth: formattedDate });
+      setUserData(userDetails);
     }
   }, [handleGetUserData]);
 
-  const [handleLogout,{loading,error}]=useMutation(logoutSchema);
-  const logout = async() => {
-    const res=await handleLogout();
+  const [handleLogout, { loading, error }] = useMutation(logoutSchema);
+  const logout = async () => {
+    const res = await handleLogout();
     console.log(res);
     setUserData();
     setShow(false);
@@ -39,12 +47,11 @@ const LoggedIn = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleEditSubmit = () => {
-    try {
-      axios.post(`${url}/user/updateUser`, formData);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleEditSubmit = async () => {
+    const res = await updateUserData({
+      variables: { ...formData, id: userData?.id },
+    });
+    console.log(formData);
     setEditShow(false);
   };
 
@@ -52,15 +59,23 @@ const LoggedIn = () => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setFormData({ ...formData, ProfilePicture: imageUrl });
+      setFormData({ ...formData, profilePicture: imageUrl });
     }
   };
 
+  useEffect(() => {
+    console.log("Updated formData:", formData);
+
+    if (formData?.dateOfBirth) {
+    } else {
+      console.log("Invalid or missing dateOfBirth");
+    }
+  }, [formData]);
 
 
   return (
     <div className="w-100">
-      <div className="history d-flex  flex-column w-100 h-100">
+      <div className="history d-flex flex-column w-100 h-100">
         <Modal show={show} centered>
           <Modal.Header>
             <div className="logout-header h3">Log Out</div>
@@ -87,7 +102,7 @@ const LoggedIn = () => {
               <Form.Group className="mb-3">
                 <Form.Label>
                   <img
-                    src={formData?.ProfilePicture||alter}
+                    src={formData?.profilePicture || alter}
                     className="rounded-circle"
                     style={{ width: "150px" }}
                   />
@@ -130,17 +145,17 @@ const LoggedIn = () => {
                 <Form.Check
                   type="radio"
                   name="gender"
-                  value="Male"
+                  value="MALE"
                   label="Male"
-                  checked={formData.gender == "Male"}
+                  checked={formData.gender == "MALE"}
                   onChange={handleEditChange}
                 />
                 <Form.Check
                   type="radio"
                   name="gender"
-                  value="Female"
+                  value="FEMALE"
                   label="Female"
-                  checked={formData.gender == "Female"}
+                  checked={formData.gender == "FEMALE"}
                   onChange={handleEditChange}
                 />
               </Form.Group>
@@ -199,9 +214,9 @@ const LoggedIn = () => {
               className="card shadow-lg p-4 text-start"
               style={{ width: "350px" }}>
               <img
-                src={formData?.ProfilePicture||alter}
+                src={formData?.profilePicture || alter}
                 alt={""}
-                className="rounded-circle mb-3 h5 display-5 bg-primary text-white"
+                className="rounded-circle mb-3 h5 display-5 bg-info text-white"
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}
               />
               <h6 className="text-muted">

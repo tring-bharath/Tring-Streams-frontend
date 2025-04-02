@@ -6,20 +6,21 @@ import { gql, useQuery } from "@apollo/client";
 import { getHistories, getUser } from "../../../graphql/query";
 import { globalData } from "../../../routes/AppRoutes";
 
-
 const History = () => {
   const url = import.meta.env.VITE_API_URL;
   const [videos, setVideos] = useState([]);
-  const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
-  const {userData,setUserData}=useContext(globalData);
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
+  const { userData, setUserData } = useContext(globalData);
 
   useEffect(() => {
     if (handleGetUserData && handleGetUserData.getUserData) {
       setUserData(handleGetUserData.getUserData);
     }
   }, [handleGetUserData]);
-  
-  const { loading, error, data,refetch } = useQuery(getHistories, {
+
+  const { loading, error, data, refetch } = useQuery(getHistories, {
     variables: { userId: userData?.id },
     skip: !userData,
   });
@@ -27,17 +28,15 @@ const History = () => {
   useEffect(() => {
     setVideos(data?.allUserHistories?.nodes);
   }, [data]);
-  useEffect(()=>
-    {
-      refetch(
-        {
-          variables:{userId:userData?.id}
-        }
-      )
-    },[])
+
+  useEffect(() => {
+    refetch({
+      variables: { userId: userData?.id },
+    });
+  }, []);
   return (
     <div className="history-container">
-      {videos?.length != 0 && <h1 className="ms-3">History</h1>}
+      {videos?.length > 0 && <h1 className="ms-3">History</h1>}
       <div className="px-3 mt-1 history-cards">
         {videos?.map((video) => (
           <HistoryCard video={video} refetch={refetch} />

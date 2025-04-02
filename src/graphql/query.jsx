@@ -14,6 +14,8 @@ query user {
 getUserData {
   email
   firstName
+  lastName
+  bio
   id
   dateOfBirth
   gender
@@ -97,3 +99,15 @@ query guest {
   }
 }
 `
+export const getAllVideos = gql`
+    query user($id: Int!) {
+      allVideoById(id: $id) {
+        id
+        likes
+        thumbnail
+        videoUrl
+        tags
+        views
+      }
+    }
+  `;
