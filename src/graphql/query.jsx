@@ -69,21 +69,38 @@ allUserWatchlists(condition: {userId: $userId}) {
 }
 }
 `
-export const getVideos = gql
-`
-  query guest {
-    allAllVideos {
-      nodes {
-        id
-        tags
-        likes
-        thumbnail
-        views
+// export const getVideos = gql
+// `
+//   query guest {
+//     allAllVideos {
+//       nodes {
+//         id
+//         tags
+//         likes
+//         thumbnail
+//         views
+//       }
+//     }
+//   }
+// `
+// ;
+export const getVideos= gql`
+query guest($first: Int, $after: Cursor) {
+    allAllVideos(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          thumbnail
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
-`
-;
+`;
 export const getCarousel=gql
 `
 query guest {
