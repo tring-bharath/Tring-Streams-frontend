@@ -6,7 +6,7 @@ import Search from "../MainPage/Search";
 import Watchlist from "../MainPage/Watchlist";
 import Login from "../Profile/Auth/Login";
 import Profile from "../Profile/Users/Profiles";
-import Signup from "../Profile/signup";
+import Signup from "../Profile/Signup";
 import Dashboard from "../MainPage/Home/Dashboard/Dashboard";
 import Videopreview from "../components/VideoPreview/Videopreview";
 import ForgotPassword from "../Profile/Auth/ForgotPassword";
