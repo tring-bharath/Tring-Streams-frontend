@@ -8,6 +8,7 @@ import { getUser } from "../../graphql/query";
 import { globalData } from "../../routes/AppRoutes";
 import "react-toastify/dist/ReactToastify.css";
 import "./VideoCard.css";
+import { watchListMutation } from "../../graphql/mutation";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -32,15 +33,7 @@ const VideoCard = ({ video }) => {
       setShow(true);
     }
   };
-  const watchListMutation = gql`
-    mutation user($videoId: Int!, $userId: Int!) {
-      createUserWatchlist(
-        input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
-      ) {
-        clientMutationId
-      }
-    }
-  `;
+
   const [createWatchList] = useMutation(watchListMutation,{
     onCompleted:()=>
     {
@@ -62,7 +55,10 @@ const VideoCard = ({ video }) => {
       });
   };
 
-  
+  const setLogin=()=>
+  {
+    nav("/registration");
+  }
   return (
     <div className="video-card rounded-1 pb-2">
       <Image

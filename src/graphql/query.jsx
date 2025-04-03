@@ -86,20 +86,21 @@ allUserWatchlists(condition: {userId: $userId}) {
 // ;
 export const getVideos= gql`
 query guest($first: Int, $after: Cursor) {
-    allAllVideos(first: $first, after: $after) {
-      edges {
-        node {
-          id
-          thumbnail
-        }
-        cursor
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
+  allAllVideos(first: $first, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      id
+      likes
+      tags
+      thumbnail
+      views
     }
   }
+}
+
 `;
 export const getCarousel=gql
 `

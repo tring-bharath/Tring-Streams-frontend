@@ -66,3 +66,12 @@ export const updateUserSchema = gql`
       }
     }
   `;
+  export  const watchListMutation = gql`
+      mutation user($videoId: Int!, $userId: Int!) {
+        createUserWatchlist(
+          input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
+        ) {
+          clientMutationId
+        }
+      }
+    `;
