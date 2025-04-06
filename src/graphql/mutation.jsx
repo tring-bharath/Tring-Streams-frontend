@@ -34,7 +34,7 @@ export const updateUserSchema = gql`
     $location: String = ""
     $phoneNumber: String = ""
     $profilePicture: String = ""
-    $bio:String=""
+    $bio: String = ""
     $id: Int!
   ) {
     updateUserById(
@@ -47,7 +47,7 @@ export const updateUserSchema = gql`
           location: $location
           phoneNumber: $phoneNumber
           profilePicture: $profilePicture
-          bio:$bio  
+          bio: $bio
         }
         id: $id
       }
@@ -57,21 +57,37 @@ export const updateUserSchema = gql`
   }
 `;
 
- export const historyMutation = gql`
-    mutation user($videoId: Int!, $userId: Int!) {
-      createUserHistory(
-        input: { userHistory: { allVideosId: $videoId, userId: $userId } }
-      ) {
-        clientMutationId
-      }
+export const historyMutation = gql`
+  mutation user($videoId: Int!, $userId: Int!) {
+    createUserHistory(
+      input: { userHistory: { allVideosId: $videoId, userId: $userId } }
+    ) {
+      clientMutationId
     }
-  `;
-  export  const watchListMutation = gql`
-      mutation user($videoId: Int!, $userId: Int!) {
-        createUserWatchlist(
-          input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
-        ) {
-          clientMutationId
-        }
-      }
-    `;
+  }
+`;
+export const watchListMutation = gql`
+  mutation user($videoId: Int!, $userId: Int!) {
+    createUserWatchlist(
+      input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
+    ) {
+      clientMutationId
+    }
+  }
+`;
+
+export const updateViews = gql`
+  mutation user($videoId: Int!) {
+    updateViews(videoId: $videoId)
+  }
+`;
+export const sendOtpMutation=gql`
+mutation guest($email: String = "") {
+  sendOtp(email: $email)
+}
+`
+export const checkOtpMutation=gql`
+mutation guest($email: String = "", $otp: Int = 10) {
+  checkOtp(email: $email, otp: $otp)
+}
+`

@@ -3,21 +3,30 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
+import { checkOtpMutation, sendOtpMutation } from "../../graphql/mutation";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const [otpSend, setOtpSend] = useState(false);
   const location = useLocation();
-  const email = location.state?.email || "";
+  const email = location.state || "";
   const [inputEmail, setInputEmail] = useState(email);
   const [otp, setOtp] = useState();
+  const [handleSendOtp]=useMutation(sendOtpMutation);
+  const [handleCheckOtp]=useMutation(checkOtpMutation);
   const sendOtp = async (e) => {
+    console.log(location.state);
     e.preventDefault();
     try {
-      const response = await axios.post(`${url}/user/sendOtp`, {
-        email: inputEmail,
-      });
+      const res=await handleSendOtp({
+        variables:
+        {
+          email:inputEmail
+        }
+      })
+      console.log(res);
       toast.success("OTP Sent");
       setOtpSend(true);
     } catch (error) {
@@ -28,8 +37,15 @@ const ForgotPassword = () => {
   const checkOtp = async (e) => {
     const email = inputEmail;
     try {
-      const response = await axios.post(`${url}/user/checkOtp`, { email, otp });
-      if (response.data === "OTP verified") {
+      const res=await handleCheckOtp({
+        variables:
+        {
+          email,
+          otp:parseInt(otp)
+        }
+      });
+      console.log(res.data.checkOtp);
+      if (res.data.checkOtp === "OTP Verified") {
         toast.success("OTP verified");
         navigate("/resetpassword", { state: { email: inputEmail } });
       } else {

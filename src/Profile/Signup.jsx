@@ -45,10 +45,12 @@ export default function Signup() {
         },
       });
       if (res.data.register) {
-        alert(res.data.register);
+        console.log(res.data.register);
+        toast.success("user Registered Successfully");
         nav("/Registration");
       }
     } catch (error) {
+      console.log(error);
       toast.error("Email already Exists");
     }
   };

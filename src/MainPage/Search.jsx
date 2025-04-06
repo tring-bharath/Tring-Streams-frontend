@@ -5,18 +5,18 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { gql, useQuery } from "@apollo/client";
 import { searchSchema } from "../graphql/query";
-
+import { FourSquare } from "react-loading-indicators";
 
 const Search = () => {
   const [search, setSearch] = useState("");
   const [videos, setVideos] = useState([]);
 
   const { loading, error, data, refetch } = useQuery(searchSchema, {
-    variables: { tag: "" }
+    variables: { tag: "" },
   });
 
   useEffect(() => {
-    refetch({ tag: search }); // Refetch when search changes
+    refetch({ tag: search });
   }, [search]);
 
   useEffect(() => {
@@ -24,6 +24,9 @@ const Search = () => {
       setVideos(data.allAllVideos.nodes);
     }
   }, [data]);
+  if (loading) {
+    return <div className="d-flex vh-100 w-100 align-items-center justify-content-center"><FourSquare color="#0074D9" size="large" text="Loading..." textColor="#0074D9" /></div>;
+  }
   return (
     <div className=" d-flex flex-column align-items-center w-100">
       <ToastContainer />

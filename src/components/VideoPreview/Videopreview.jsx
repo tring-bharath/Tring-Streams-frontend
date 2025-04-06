@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 import { useMutation, useQuery } from "@apollo/client";
 import { globalData } from "../../routes/AppRoutes";
 import { getAllVideos, getUser } from "../../graphql/query";
-import { historyMutation } from "../../graphql/mutation";
+import { historyMutation, updateViews } from "../../graphql/mutation";
 import "./videopreview.css";
 
 
@@ -16,6 +16,7 @@ const Videopreview = () => {
   const navigate = useNavigate();
 
   const { userData, setUserData } = useContext(globalData);
+  const [handleUpdateViews]=useMutation(updateViews)
 
   const {
     loading: userLoading,
@@ -39,7 +40,14 @@ const Videopreview = () => {
       setVideoUrl(data.allVideoById.videoUrl);
     }
   }, [data]);
-
+  useEffect(()=>
+  {
+    handleUpdateViews({
+      variables:{
+        videoId:video.id
+      }
+    })
+  },[])
   useEffect(() => {
     if (userData?.id) {
       console.table(id, userData.id);
@@ -50,7 +58,8 @@ const Videopreview = () => {
   }, [userData]); 
   
   const navToHome = () => {
-    navigate("/");
+    // navigate("/");
+    window.history.back();
   };
 
   return (

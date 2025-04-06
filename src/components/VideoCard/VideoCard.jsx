@@ -48,8 +48,6 @@ const VideoCard = ({ video }) => {
 
   const watchList = async (video) => {
     setIsBookMarked(true);
-    const userId = await JSON.parse(localStorage.getItem("id"));
-    console.table(video.id, userId);
       createWatchList({
         variables: { videoId: video.id, userId:userData.id },
       });

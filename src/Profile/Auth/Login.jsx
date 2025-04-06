@@ -30,11 +30,14 @@ const Login = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
 
-  const [loginUser,{loading,error}]=useMutation(loginSchema);
+  const [loginUser,{loading,error}]=useMutation(loginSchema,{fetchPolicy:"no-cache"});
   //postGraphIle implementation
   const onSubmit = async (user) => {
+    
+    
     try {
       const {email,password}=user;
+      console.log(email,password);
       const res=await loginUser({
         variables:{
         email,
@@ -43,42 +46,15 @@ const Login = () => {
       })
       if(res.data.login)
       {
-        console.table("response",res.data.login)
-        localStorage.setItem("token",res.data.login.token);
-        localStorage.setItem("user",JSON.stringify(user.email));
+        toast.success(res.data.login)
         nav("/")
       }
     } catch (err) {
       console.table("err",err)
-      alert("cannot login")
+      toast.error("cannot login")
     }
   };
 
-  //rest Implementation
-  // const onSubmit = async (user) => {
-  //   try {
-  //     setEmail(user.email);
-  //     console.log(user);
-  //     const userLogin = await axios.post(`${url}/user/loginUser`, user);
-  //     const token = userLogin.data.token;
-  //     const username = userLogin.data.user.firstName;
-  //     const userId = userLogin.data.user._id;
-  //     const email = userLogin.data.user.email;
-  //     if (userLogin?.data == "WrongPassword") {
-  //       toast.error("Invalid Credentials");
-  //       return;
-  //     }
-  //     localStorage.setItem("user", JSON.stringify(username));
-  //     localStorage.setItem("id", JSON.stringify(userId));
-  //     localStorage.setItem("email", JSON.stringify(email));
-  //     localStorage.setItem("token", JSON.stringify(token));
-  //     setUsername(username);
-
-  //     nav("/");
-  //   } catch (error) {
-  //     toast.error("Email Address not Registered");
-  //   }
-  // };
 
   const setEye = () => {
     setToggleEye(!toggleEye);

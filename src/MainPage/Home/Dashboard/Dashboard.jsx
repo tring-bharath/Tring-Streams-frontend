@@ -9,8 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "./Dashboard.css";
 import { globalData } from "../../../routes/AppRoutes";
 import { getCarousel, getUser, getVideos } from "../../../graphql/query";
-import FullPageLoader from "../../../components/VideoPreview/fullPageLoader/fullPageLoader";
-
+import { FourSquare } from "react-loading-indicators";
 const Dashboard = () => {
   const nav = useNavigate();
   const [videos, setVideos] = useState([]);
@@ -18,7 +17,9 @@ const Dashboard = () => {
   const [hasMore, setHasMore] = useState(true);
   const { userData, setUserData } = useContext(globalData);
 
-  const { data: handleGetUserData } = useQuery(getUser, { fetchPolicy: "no-cache" });
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
 
   useEffect(() => {
     if (handleGetUserData?.getUserData) {
@@ -26,8 +27,12 @@ const Dashboard = () => {
     }
   }, [handleGetUserData]);
 
-  const { loading: videosLoading, fetchMore, data: videosData } = useQuery(getVideos, {
-    variables: { first: 10, after: null },
+  const {
+    loading: videosLoading,
+    fetchMore,
+    data: videosData,
+  } = useQuery(getVideos, {
+    variables: { first: 20, after: null },
     fetchPolicy: "no-cache",
   });
 
@@ -38,7 +43,10 @@ const Dashboard = () => {
     }
   }, [videosData]);
 
-  const { loading: carouselLoading, data: carouselData } = useQuery(getCarousel, { fetchPolicy: "no-cache" });
+  const { loading: carouselLoading, data: carouselData } = useQuery(
+    getCarousel,
+    { fetchPolicy: "no-cache" }
+  );
 
   useEffect(() => {
     if (carouselData?.allAllVideos) {
@@ -49,14 +57,20 @@ const Dashboard = () => {
   const loadMoreVideos = () => {
     if (videosData?.allAllVideos?.pageInfo?.hasNextPage) {
       fetchMore({
-        variables: { first: 10, after: videosData.allAllVideos.pageInfo.endCursor },
+        variables: {
+          first: 20,
+          after: videosData.allAllVideos.pageInfo.endCursor,
+        },
         updateQuery: (prevResult, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prevResult;
 
           return {
             allAllVideos: {
               ...fetchMoreResult.allAllVideos,
-              nodes: [...prevResult.allAllVideos.nodes, ...fetchMoreResult.allAllVideos.nodes],
+              nodes: [
+                ...prevResult.allAllVideos.nodes,
+                ...fetchMoreResult.allAllVideos.nodes,
+              ],
             },
           };
         },
@@ -67,7 +81,7 @@ const Dashboard = () => {
   };
 
   if (videosLoading || carouselLoading) {
-    return <FullPageLoader />;
+    return <div className="d-flex vh-100 w-100 align-items-center justify-content-center"><FourSquare color="#0074D9" size="large" text="Loading..." textColor="#0074D9" /></div>;
   }
 
   return (
