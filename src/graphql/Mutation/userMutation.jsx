@@ -56,38 +56,18 @@ export const updateUserSchema = gql`
     }
   }
 `;
-
-export const historyMutation = gql`
-  mutation user($videoId: Int!, $userId: Int!) {
-    createUserHistory(
-      input: { userHistory: { allVideosId: $videoId, userId: $userId } }
-    ) {
-      clientMutationId
-    }
+export const sendOtpMutation = gql`
+  mutation guest($email: String = "") {
+    sendOtp(email: $email)
   }
 `;
-export const watchListMutation = gql`
-  mutation user($videoId: Int!, $userId: Int!) {
-    createUserWatchlist(
-      input: { userWatchlist: { allVideosId: $videoId, userId: $userId } }
-    ) {
-      clientMutationId
-    }
+export const checkOtpMutation = gql`
+  mutation guest($email: String = "", $otp: Int = 10) {
+    checkOtp(email: $email, otp: $otp)
   }
 `;
-
-export const updateViews = gql`
-  mutation user($videoId: Int!) {
-    updateViews(videoId: $videoId)
+export const resetPasswordMutation = gql`
+  mutation guest($email: String = "", $password: String = "") {
+    resetPassword(email: $email, password: $password)
   }
 `;
-export const sendOtpMutation=gql`
-mutation guest($email: String = "") {
-  sendOtp(email: $email)
-}
-`
-export const checkOtpMutation=gql`
-mutation guest($email: String = "", $otp: Int = 10) {
-  checkOtp(email: $email, otp: $otp)
-}
-`

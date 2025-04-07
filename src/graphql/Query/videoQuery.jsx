@@ -1,30 +1,5 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
-export const getUser=gql`
-query user {
-getUserData {
-  email
-  firstName
-  id
-}
-}
-`
-export const getUserDetails=gql`
-query user {
-getUserData {
-  email
-  firstName
-  lastName
-  bio
-  id
-  dateOfBirth
-  gender
-  phoneNumber
-  location
-  profilePicture
-}
-}
-`
 export const searchSchema=gql`
 query guest($tag: String = "") {
   allAllVideos(filter: {tags: {includesInsensitive: $tag}}) {
@@ -69,21 +44,7 @@ allUserWatchlists(condition: {userId: $userId}) {
 }
 }
 `
-// export const getVideos = gql
-// `
-//   query guest {
-//     allAllVideos {
-//       nodes {
-//         id
-//         tags
-//         likes
-//         thumbnail
-//         views
-//       }
-//     }
-//   }
-// `
-// ;
+
 export const getVideos= gql`
 query guest($first: Int, $after: Cursor) {
   allAllVideos(first: $first, after: $after) {

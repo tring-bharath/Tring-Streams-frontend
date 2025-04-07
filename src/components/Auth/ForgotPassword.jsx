@@ -1,10 +1,11 @@
-import axios from "axios";
 import React, { useState } from "react";
-import { ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
-import { checkOtpMutation, sendOtpMutation } from "../../graphql/mutation";
+import {
+  checkOtpMutation,
+  sendOtpMutation,
+} from "../../graphql/Mutation/userMutation";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -14,18 +15,17 @@ const ForgotPassword = () => {
   const email = location.state || "";
   const [inputEmail, setInputEmail] = useState(email);
   const [otp, setOtp] = useState();
-  const [handleSendOtp]=useMutation(sendOtpMutation);
-  const [handleCheckOtp]=useMutation(checkOtpMutation);
+  const [handleSendOtp] = useMutation(sendOtpMutation);
+  const [handleCheckOtp] = useMutation(checkOtpMutation);
   const sendOtp = async (e) => {
     console.log(location.state);
     e.preventDefault();
     try {
-      const res=await handleSendOtp({
-        variables:
-        {
-          email:inputEmail
-        }
-      })
+      const res = await handleSendOtp({
+        variables: {
+          email: inputEmail,
+        },
+      });
       console.log(res);
       toast.success("OTP Sent");
       setOtpSend(true);
@@ -37,12 +37,11 @@ const ForgotPassword = () => {
   const checkOtp = async (e) => {
     const email = inputEmail;
     try {
-      const res=await handleCheckOtp({
-        variables:
-        {
+      const res = await handleCheckOtp({
+        variables: {
           email,
-          otp:parseInt(otp)
-        }
+          otp: parseInt(otp),
+        },
       });
       console.log(res.data.checkOtp);
       if (res.data.checkOtp === "OTP Verified") {
@@ -58,7 +57,6 @@ const ForgotPassword = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <ToastContainer />
       <div className="card shadow-lg p-4" style={{ width: "400px" }}>
         {otpSend ? (
           <div className="text-center">

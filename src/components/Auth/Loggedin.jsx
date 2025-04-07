@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import alter from "../../assets/signin.png";
 import { useMutation, useQuery } from "@apollo/client";
-import { logoutSchema, updateUserSchema } from "../../graphql/mutation";
+import {
+  logoutSchema,
+  updateUserSchema,
+} from "../../graphql/Mutation/userMutation";
+import alter from "../../assets/signin.png";
 import { globalData } from "../../routes/AppRoutes";
-import { getUserDetails } from "../../graphql/query";
+import { getUserDetails } from "../../graphql/Query/userQuery";
 const LoggedIn = () => {
-  const url = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [formData, setFormData] = useState({});
@@ -26,7 +28,7 @@ const LoggedIn = () => {
     if (handleGetUserData?.getUserData) {
       const userDetails = handleGetUserData.getUserData;
       const formattedDate =
-        userDetails.dateOfBirth && !isNaN(new Date(userDetails.dateOfBirth)) 
+        userDetails.dateOfBirth && !isNaN(new Date(userDetails.dateOfBirth))
           ? new Date(userDetails.dateOfBirth).toISOString().split("T")[0]
           : "";
       setFormData({ ...userDetails, dateOfBirth: formattedDate });
@@ -71,7 +73,6 @@ const LoggedIn = () => {
       console.log("Invalid or missing dateOfBirth");
     }
   }, [formData]);
-
 
   return (
     <div className="w-100">

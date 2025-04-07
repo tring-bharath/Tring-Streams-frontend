@@ -2,13 +2,12 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {  useMutation } from "@apollo/client";
+import { loginSchema } from "../../graphql/Mutation/userMutation";
 import "../../index.css";
-import { gql, useMutation } from "@apollo/client";
-import { loginSchema } from "../../graphql/mutation";
 
 const Login = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -29,32 +28,29 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-
-  const [loginUser,{loading,error}]=useMutation(loginSchema,{fetchPolicy:"no-cache"});
+  const [loginUser, { loading, error }] = useMutation(loginSchema, {
+    fetchPolicy: "no-cache",
+  });
   //postGraphIle implementation
   const onSubmit = async (user) => {
-    
-    
     try {
-      const {email,password}=user;
-      console.log(email,password);
-      const res=await loginUser({
-        variables:{
-        email,
-        password
-        }
-      })
-      if(res.data.login)
-      {
-        toast.success(res.data.login)
-        nav("/")
+      const { email, password } = user;
+      console.log(email, password);
+      const res = await loginUser({
+        variables: {
+          email,
+          password,
+        },
+      });
+      if (res.data.login) {
+        toast.success(res.data.login);
+        nav("/");
       }
     } catch (err) {
-      console.table("err",err)
-      toast.error("cannot login")
+      console.table("err", err);
+      toast.error("cannot login");
     }
   };
-
 
   const setEye = () => {
     setToggleEye(!toggleEye);
@@ -63,7 +59,6 @@ const Login = () => {
 
   return (
     <div>
-      <ToastContainer />
       <form
         className="form-container d-flex flex-column container justify-content-center"
         onSubmit={handleSubmit(onSubmit)}>

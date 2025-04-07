@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import HistoryCard from "../../../components/HistoryCard";
-import axios from "axios";
+import HistoryCard from "../HistoryCard";
+import {  useQuery } from "@apollo/client";
+import { getHistories } from "../../graphql/Query/videoQuery";
+import { globalData } from "../../routes/AppRoutes";
+import { getUser } from "../../graphql/Query/userQuery";
 import "./History.css";
-import { gql, useQuery } from "@apollo/client";
-import { getHistories, getUser } from "../../../graphql/query";
-import { globalData } from "../../../routes/AppRoutes";
 
 const History = () => {
   const url = import.meta.env.VITE_API_URL;

@@ -2,12 +2,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { gql, useMutation } from "@apollo/client";
-import { registerSchema } from "../graphql/mutation";
+import { registerSchema } from "../../graphql/Mutation/userMutation";
 export default function Signup() {
   const url = import.meta.env.VITE_API_URL;
   const [toggleEye, setToggleEye] = useState(false);
@@ -69,7 +68,6 @@ export default function Signup() {
 
   return (
     <>
-      <ToastContainer />
       <form
         className="form-container d-flex flex-column container"
         onSubmit={handleSubmit(onSubmit)}>

@@ -3,12 +3,12 @@ import { FaBookmark, FaEye, FaRegBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Image, Modal } from "react-bootstrap";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { getUser } from "../../graphql/query";
+import { useMutation, useQuery } from "@apollo/client";
+import { getUser } from "../../graphql/Query/userQuery";
 import { globalData } from "../../routes/AppRoutes";
+import { watchListMutation } from "../../graphql/Mutation/videoMutation";
 import "react-toastify/dist/ReactToastify.css";
 import "./VideoCard.css";
-import { watchListMutation } from "../../graphql/mutation";
 
 const VideoCard = ({ video }) => {
   const nav = useNavigate();
@@ -16,15 +16,17 @@ const VideoCard = ({ video }) => {
   const [show, setShow] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const user = localStorage.getItem("token");
-    const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
-    const {userData,setUserData}=useContext(globalData);
-  
-    useEffect(() => {
-      if (handleGetUserData && handleGetUserData.getUserData) {
-        setUserData(handleGetUserData.getUserData);
-      }
-    }, [handleGetUserData]);
-    
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
+  const { userData, setUserData } = useContext(globalData);
+
+  useEffect(() => {
+    if (handleGetUserData && handleGetUserData.getUserData) {
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
+
   const watchNow = async () => {
     if (userData?.id) {
       nav("/videoplayer", { state: video });
@@ -34,29 +36,25 @@ const VideoCard = ({ video }) => {
     }
   };
 
-  const [createWatchList] = useMutation(watchListMutation,{
-    onCompleted:()=>
-    {
+  const [createWatchList] = useMutation(watchListMutation, {
+    onCompleted: () => {
       toast.success("Added to WatchList");
-    }
-    ,
-    onError:()=>
-    {
-      toast.error("Already in the WatchList")
-    }
+    },
+    onError: () => {
+      toast.error("Already in the WatchList");
+    },
   });
 
   const watchList = async (video) => {
     setIsBookMarked(true);
-      createWatchList({
-        variables: { videoId: video.id, userId:userData.id },
-      });
+    createWatchList({
+      variables: { videoId: video.id, userId: userData.id },
+    });
   };
 
-  const setLogin=()=>
-  {
+  const setLogin = () => {
     nav("/registration");
-  }
+  };
   return (
     <div className="video-card rounded-1 pb-2">
       <Image
@@ -69,14 +67,11 @@ const VideoCard = ({ video }) => {
       <div className="video-info d-flex flex-column">
         <h4 className="ellipsis px-2 video-title">{video.tags}</h4>
         <div className="video-stats px-2 d-flex align-items-center">
-          {/* <span className="likes pe-3 ">
-            <FaHeart className="text-danger" /> {video.likes}
-          </span> */}
           <span className="views">
             <FaEye className="text-primary" /> {video.views}
           </span>
           <div className="overlay-buttons d-flex px-2 my-1">
-            {userData&&Object.keys(userData).length>0 ? (
+            {userData && Object.keys(userData).length > 0 ? (
               <button
                 className="add-watchlist button rounded px-2 py-1"
                 onClick={() => watchList(video)}>

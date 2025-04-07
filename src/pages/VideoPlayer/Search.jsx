@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import VideoCard from "../components/VideoCard/VideoCard";
-import { ToastContainer } from "react-toastify";
+import VideoCard from "../../components/VideoCard/VideoCard";
 import "react-toastify/dist/ReactToastify.css";
 import { gql, useQuery } from "@apollo/client";
-import { searchSchema } from "../graphql/query";
+import { searchSchema } from "../../graphql/Query/videoQuery";
 import { FourSquare } from "react-loading-indicators";
 
 const Search = () => {
@@ -25,11 +24,19 @@ const Search = () => {
     }
   }, [data]);
   if (loading) {
-    return <div className="d-flex vh-100 w-100 align-items-center justify-content-center"><FourSquare color="#0074D9" size="large" text="Loading..." textColor="#0074D9" /></div>;
+    return (
+      <div className="d-flex vh-100 w-100 align-items-center justify-content-center">
+        <FourSquare
+          color="#0074D9"
+          size="large"
+          text="Loading..."
+          textColor="#0074D9"
+        />
+      </div>
+    );
   }
   return (
     <div className=" d-flex flex-column align-items-center w-100">
-      <ToastContainer />
       <div className="search d-flex justify-content-center w-100">
         <FaSearch className="search-icon align-self-center" size={30} />
         <input

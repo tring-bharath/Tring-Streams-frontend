@@ -1,23 +1,23 @@
 import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../MainPage/Home/Home";
-import Landingpage from "../Profile/Users/LandingPage/Landingpage";
-import Search from "../MainPage/Search";
-import Watchlist from "../MainPage/Watchlist";
-import Login from "../Profile/Auth/Login";
-import Profile from "../Profile/Users/Profiles";
-import Signup from "../Profile/Signup";
-import Dashboard from "../MainPage/Home/Dashboard/Dashboard";
+import Home from "../pages/VideoPlayer/Home";
+import Landingpage from "../pages/Auth/LandingPage/Landingpage";
+import Search from "../pages/VideoPlayer/Search";
+import Watchlist from "../pages/VideoPlayer/Watchlist";
+import Login from "../pages/Auth/Login";
+import Profile from "../pages/Auth/Profiles";
+import Signup from "../pages/Auth/Signup";
+import Dashboard from "../pages/VideoPlayer/Dashboard/Dashboard";
 import Videopreview from "../components/VideoPreview/Videopreview";
-import ForgotPassword from "../Profile/Auth/ForgotPassword";
-import ResetPassword from "../Profile/Auth/ResetPassword";
+import ForgotPassword from "../components/Auth/ForgotPassword";
+import ResetPassword from "../components/Auth/ResetPassword";
 
 export const globalData = createContext();
 const AppRoutes = () => {
-  const [userData,setUserData] = useState({});
+  const [userData, setUserData] = useState({});
 
   return (
-    <globalData.Provider value={{ userData,setUserData }}>
+    <globalData.Provider value={{ userData, setUserData }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}>

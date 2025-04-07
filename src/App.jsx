@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 function App() {
   return (
     <div className="app ">
-      <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-right" autoClose={1000} />
       <AppRoutes />
     </div>
   );

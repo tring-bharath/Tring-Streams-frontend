@@ -60,8 +60,4 @@ font-weight: 16px;
 .carousel-container {
   width: 94%;
 }
-/* @media (max-width: 768px) {
-  .carousel-container {
-    height: 25vh !important;
-  }
-} */
+

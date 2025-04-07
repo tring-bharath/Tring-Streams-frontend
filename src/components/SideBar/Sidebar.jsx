@@ -2,30 +2,29 @@ import React, { useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaBookmark, FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./Sidebar.css";
-import { ToastContainer } from "react-toastify";
 import { useQuery } from "@apollo/client";
-import { getUser } from "../../../graphql/query";
-import { globalData } from "../../../routes/AppRoutes";
+import { getUser } from "../../graphql/Query/userQuery";
+import { globalData } from "../../routes/AppRoutes";
+import "./Sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
   const isActive = (path) => {
     return location.pathname === path;
   };
-    const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
-    const {userData,setUserData}=useContext(globalData);
-  
-    useEffect(() => {
-      if (handleGetUserData && handleGetUserData.getUserData) {
-        setUserData(handleGetUserData.getUserData);
-      }
-    }, [handleGetUserData]);
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
+  const { userData, setUserData } = useContext(globalData);
+
+  useEffect(() => {
+    if (handleGetUserData && handleGetUserData.getUserData) {
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
 
   return (
     <div className="sidebar p-3 d-flex flex-column justify-content-center gap-4">
-      <ToastContainer />
       <Link
         to="/"
         className={`sidebar-link d-flex align-items-center py-3 px-2 rounded text-decoration-none ${

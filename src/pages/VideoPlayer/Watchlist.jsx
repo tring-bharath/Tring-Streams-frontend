@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import WatchListCard from "../components/WatchListCard";
+import WatchListCard from "../../components/WatchListCard";
 import { gql, useQuery } from "@apollo/client";
-import { getUser, getWatchList } from "../graphql/query";
-import { globalData } from "../routes/AppRoutes";
-
-
+import {  getWatchList } from "../../graphql/Query/videoQuery";
+import { globalData } from "../../routes/AppRoutes";
+import { FourSquare } from "react-loading-indicators";
+import { getUser } from "../../graphql/Query/userQuery";
 
 const Watchlist = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -16,39 +16,50 @@ const Watchlist = () => {
     navigate("/registration");
   };
 
-  const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
-  const {userData,setUserData}=useContext(globalData);
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
+  const { userData, setUserData } = useContext(globalData);
 
   useEffect(() => {
     if (handleGetUserData && handleGetUserData.getUserData) {
       setUserData(handleGetUserData.getUserData);
     }
   }, [handleGetUserData]);
-  
-  const { loading, error, data,refetch } = useQuery(getWatchList, {
+
+  const { loading, data, refetch } = useQuery(getWatchList, {
     variables: { userId: userData?.id },
     skip: !userData,
   });
   useEffect(() => {
     setVideos(data?.allUserWatchlists?.nodes);
   }, [data]);
-  useEffect(()=>
-    {
-      refetch(
-        {
-          variables:{userId:userData.id}
-        }
-      )
-    },[])
+  useEffect(() => {
+    refetch({
+      variables: { userId: userData.id },
+    });
+  }, []);
+  if (loading) {
+    return (
+      <div className="d-flex vh-100 w-100 align-items-center justify-content-center">
+        <FourSquare
+          color="#0074D9"
+          size="large"
+          text="Loading..."
+          textColor="#0074D9"
+        />
+      </div>
+    );
+  }
   return (
-    <div className="container w-100">
+    <div className="ms-4 w-100">
       {userData != null ? (
         <div className="userAvailable">
           <p className="h1 ms-2 mt-2">Watch List</p>
-          {videos?.length >0 ? (
+          {videos?.length > 0 ? (
             <div className="d-flex px-2 flex-wrap video-cards mt-4">
               {videos?.map((video) => (
-                <WatchListCard video={video} refetch={refetch}/>
+                <WatchListCard video={video} refetch={refetch} />
               ))}
             </div>
           ) : (
@@ -72,6 +83,5 @@ const Watchlist = () => {
     </div>
   );
 };
-
 
 export default Watchlist;

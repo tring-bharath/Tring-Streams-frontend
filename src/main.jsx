@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from "@apollo/client";
 
 const httpLink = createHttpLink({
-  uri: "https://nzqqkzs6-4000.inc1.devtunnels.ms/graphql",
+  uri: "http://localhost:4000/graphql",
   credentials:"include"
 });
 

@@ -1,15 +1,15 @@
-import axios from "axios";
 import React, { useState } from "react";
-import { ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
+import { resetPasswordMutation } from "../../graphql/Mutation/userMutation";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
-  const url = import.meta.env.VITE_API_URL;
   const location = useLocation();
+  const [handleResetPassword] = useMutation(resetPasswordMutation);
   const resetPassword = async (e) => {
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -17,18 +17,27 @@ const ResetPassword = () => {
     }
     const email = location.state.email;
     console.log(email, password);
+    try{
 
-    const res = await axios.put(`${url}/user/resetPassword`, {
-      email,
-      password,
-    });
-
-    navigate("/Registration");
+      const res = await handleResetPassword({
+        variables: {
+          email,
+          password,
+        },
+      });
+      console.log(res);
+      navigate("/Registration");
+    }
+    catch(err)
+    {
+      console.log(err);
+      
+    }
+    
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <ToastContainer />
       <div className="card shadow-lg p-4" style={{ width: "400px" }}>
         <h2 className="text-center mb-3">Reset Password</h2>
         <form>

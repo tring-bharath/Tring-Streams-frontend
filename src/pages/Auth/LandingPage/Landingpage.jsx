@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./LandingPage.css";
-import { ToastContainer } from "react-toastify";
 
 const Landingpage = () => {
   const [active, setActive] = useState(0);
@@ -28,7 +27,6 @@ const Landingpage = () => {
 
   return (
     <div className="registerContainer bg-white d-flex">
-      <ToastContainer />
       <div className="Container ">
         <div className="formContainer shadow-lg ">
           <div className="registerButton d-flex justify-content-center align-items-center">

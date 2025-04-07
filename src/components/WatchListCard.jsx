@@ -1,44 +1,38 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
-import { FaEye, FaHeart, FaTrash } from "react-icons/fa";
+import { FaEye, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { globalData } from "../routes/AppRoutes";
-import { getUser } from "../graphql/query";
+import { getUser } from "../graphql/Query/userQuery";
+import { deleteWatchListCard } from "../graphql/Mutation/videoMutation";
 
-const deleteCard = gql`
-  mutation user($videoId: Int = 10, $userId: Int = 10) {
-    deleteUserWatchlistByAllVideosIdAndUserId(
-      input: { allVideosId: $videoId, userId: $userId }
-    ) {
-      clientMutationId
-      deletedUserWatchlistId
-    }
-  }
-`;
+
 const WatchListCard = ({ video, refetch }) => {
   const url = import.meta.env.VITE_API_URL;
   const nav = useNavigate();
   const [hover, setHover] = useState(false);
   // const userId = JSON.parse(localStorage.getItem("id"));
   video = video.allVideoByAllVideosId;
-    const {data:handleGetUserData}=useQuery(getUser,{fetchPolicy:"no-cache"})
-    const {userData,setUserData}=useContext(globalData);
-  
-    useEffect(() => {
-      if (handleGetUserData && handleGetUserData.getUserData) {
-        setUserData(handleGetUserData.getUserData);
-      }
-    }, [handleGetUserData]);
-  const [removeFromWatchList, { loading, error }] = useMutation(deleteCard);
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
+  const { userData, setUserData } = useContext(globalData);
+
+  useEffect(() => {
+    if (handleGetUserData && handleGetUserData.getUserData) {
+      setUserData(handleGetUserData.getUserData);
+    }
+  }, [handleGetUserData]);
+  const [removeFromWatchList] = useMutation(deleteWatchListCard);
 
   const remove = async (video) => {
     const res = await removeFromWatchList({
-      variables: { videoId: video.id, userId:userData.id },
+      variables: { videoId: video.id, userId: userData.id },
     });
     console.log(res);
     refetch({
       variables: {
-        userId:userData.id,
+        userId: userData.id,
       },
     });
   };

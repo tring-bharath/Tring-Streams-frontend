@@ -1,28 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { useMutation, useQuery } from "@apollo/client";
 import { globalData } from "../../routes/AppRoutes";
-import { getAllVideos, getUser } from "../../graphql/query";
-import { historyMutation, updateViews } from "../../graphql/mutation";
+import {  getUser } from "../../graphql/Query/userQuery";
+import { historyMutation, updateViews } from "../../graphql/Mutation/videoMutation";
+import { getAllVideos } from "../../graphql/Query/videoQuery";
 import "./videopreview.css";
-
 
 const Videopreview = () => {
   const [videoUrl, setVideoUrl] = useState(null);
   const location = useLocation();
   const video = location.state;
   const id = video.id;
-  const navigate = useNavigate();
 
   const { userData, setUserData } = useContext(globalData);
-  const [handleUpdateViews]=useMutation(updateViews)
+  const [handleUpdateViews] = useMutation(updateViews);
 
-  const {
-    loading: userLoading,
-    error: userError,
-    data: handleGetUserData,
-  } = useQuery(getUser, { fetchPolicy: "no-cache" });
+  const { data: handleGetUserData } = useQuery(getUser, {
+    fetchPolicy: "no-cache",
+  });
 
   useEffect(() => {
     if (handleGetUserData?.getUserData) {
@@ -35,19 +32,22 @@ const Videopreview = () => {
 
   const { data } = useQuery(getAllVideos, { variables: { id } });
 
+  const navToHome = () => {
+    window.history.back();
+  };
+
   useEffect(() => {
     if (data?.allVideoById?.videoUrl) {
       setVideoUrl(data.allVideoById.videoUrl);
     }
   }, [data]);
-  useEffect(()=>
-  {
+  useEffect(() => {
     handleUpdateViews({
-      variables:{
-        videoId:video.id
-      }
-    })
-  },[])
+      variables: {
+        videoId: video.id,
+      },
+    });
+  }, []);
   useEffect(() => {
     if (userData?.id) {
       console.table(id, userData.id);
@@ -55,12 +55,7 @@ const Videopreview = () => {
         .then((res) => console.log(res))
         .catch((err) => console.error(err));
     }
-  }, [userData]); 
-  
-  const navToHome = () => {
-    // navigate("/");
-    window.history.back();
-  };
+  }, [userData]);
 
   return (
     <div>

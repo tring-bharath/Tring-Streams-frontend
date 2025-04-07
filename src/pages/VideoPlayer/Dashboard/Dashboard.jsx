@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
-import VideoCard from "../../../components/VideoCard/VideoCard";
-import { useQuery } from "@apollo/client";
-import InfiniteScroll from "react-infinite-scroll-component";
-import History from "../History/History";
-import { ToastContainer } from "react-toastify";
-import "./Dashboard.css";
-import { globalData } from "../../../routes/AppRoutes";
-import { getCarousel, getUser, getVideos } from "../../../graphql/query";
 import { FourSquare } from "react-loading-indicators";
+import { useQuery } from "@apollo/client";
+import VideoCard from "../../../components/VideoCard/VideoCard";
+import InfiniteScroll from "react-infinite-scroll-component";
+import History from "../../../components/History/History";
+import { globalData } from "../../../routes/AppRoutes";
+import {getCarousel,getVideos} from "../../../graphql/Query/videoQuery";
+import { getUser } from "../../../graphql/Query/userQuery";
+import "./Dashboard.css";
 const Dashboard = () => {
   const nav = useNavigate();
   const [videos, setVideos] = useState([]);
   const [carousel, setCarousel] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const { userData, setUserData } = useContext(globalData);
+  const { setUserData } = useContext(globalData);
 
   const { data: handleGetUserData } = useQuery(getUser, {
     fetchPolicy: "no-cache",
@@ -81,12 +81,20 @@ const Dashboard = () => {
   };
 
   if (videosLoading || carouselLoading) {
-    return <div className="d-flex vh-100 w-100 align-items-center justify-content-center"><FourSquare color="#0074D9" size="large" text="Loading..." textColor="#0074D9" /></div>;
+    return (
+      <div className="d-flex vh-100 w-100 align-items-center justify-content-center">
+        <FourSquare
+          color="#0074D9"
+          size="large"
+          text="Loading..."
+          textColor="#0074D9"
+        />
+      </div>
+    );
   }
 
   return (
     <div className="carousel-container">
-      <ToastContainer />
       <Carousel wrap interval={2000} className="mb-3" fade={false} keyboard>
         {carousel?.map((video) => (
           <Carousel.Item key={video.id}>
